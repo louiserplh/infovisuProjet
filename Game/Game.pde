@@ -12,33 +12,48 @@ void draw() {
   lights();
   translate(width/2, height/2, 0);
    rotateX(rX);
-   rotateZ(rZ);
+   rotateY(rZ);
     box(200, 200, 10);
     translate(100, 0, 0);;
 }
 
 void mouseDragged() {
   
-  if(pmouseY < mouseY) {
-    if(rZ < PI/3) {
-    rZ += 0.1;
+  if(pmouseX < mouseX) { //<>//
+    float temp = rZ + 0.1; //<>//
+    if(temp > PI/3) {
+    rZ = PI/3;
     }
-  }
-  else if(pmouseY > mouseY) {
-    if(rZ > -PI/3) {
-      rZ -= 0.1;
-    }
-  }
-  
-  if(pmouseX < mouseX) {
-    if(rX < PI/3) {
-    rX += 0.1;
+    else {
+      rZ = temp;
     }
   }
   else if(pmouseX > mouseX) {
-    if(rX > -PI/3) {
-      rX -= 0.1;
+    float temp = rZ - 0.1;
+    if(temp < -PI/3) {
+      rZ = -PI/3;
+    }
+    else {
+      rZ = temp;
     }
   }
   
+  if(pmouseY < mouseY) {
+    float temp = rX - 0.1;
+    if(temp < -PI/3) {
+    rX -= PI/3;
+    }
+    else {
+      rX = temp;
+    }
+  }
+  else if(pmouseY > mouseY) {
+     float temp = rX + 0.1;
+    if(temp > PI/3) {
+      rX = PI/3;
+    }
+    else {
+      rX = temp;
+    }
+  }
 }
