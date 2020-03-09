@@ -9,24 +9,28 @@ PVector location = new PVector(0, -25, 0);
 PVector velocity = new PVector(1, 1);
 
 void settings() {
-      size(500, 500, P3D);
-    }
-void setup() { noStroke();
+    size(500, 500, P3D); //taille de la fenetre
+}
+void setup() { 
+  noStroke();
   textSize(32);
-  textAlign(CENTER,CENTER);}
+  textAlign(CENTER,CENTER);
+}
   
 void draw() {
   
    background(200);
-   lights();
-  
+   
+   //debut dessin plateau
+   lights(); 
    translate(width/2, height/2, 0);
-  
    rotateX(rX);
    rotateY(rZ);
    noStroke();
    box(200, 10, 200);
+   //fin dessin plateau 
    
+   //debut dessin sphere
    pushMatrix();
    
    translate(location.x, location.y, location.z);
@@ -34,9 +38,11 @@ void draw() {
    sphere(20);
    
    popMatrix();
+   //fin dessin sphere
    
    location.add(velocity);
    
+   //axes
    stroke(255, 0, 0);
    line(-200, 0, 0, 200, 0, 0);
   
@@ -46,7 +52,9 @@ void draw() {
    stroke(0, 0, 255);
    line(0, 0, -200, 0, 0, 200);
   
+   //texte relatif aux axes
    pushMatrix();
+   
    rotate(0); 
    fill(255, 0, 0, 255);
    text("x", 225, 0, 0);
@@ -64,7 +72,7 @@ void draw() {
     
 }
 
-void mouseDragged() {
+void mouseDragged() { //rotation du plateau en fonction des axes
   
   if(pmouseX < mouseX && rZ < PI/3) { //<>//
     rZ = rZ + rapidity; //<>//
@@ -81,7 +89,7 @@ void mouseDragged() {
   }
 }
   
-void mouseWheel(MouseEvent event) {
+void mouseWheel(MouseEvent event) { // gérer la rapidité de la rotation
   if (event.getCount() > 0) {
     rapidity += 0.01;
   }
