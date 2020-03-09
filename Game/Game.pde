@@ -1,7 +1,7 @@
 float depth = 2000;
-float rX = PI/2;
+float rX = 0;
 float rZ = 0;
-float rapidity = 0.1;
+float rapidity = 0.02;
 
 void settings() {
       size(500, 500, P3D);
@@ -16,30 +16,35 @@ void draw() {
   lights();
   
   translate(width/2, height/2, 0);
+  
    rotateX(rX);
    rotateY(rZ);
    noStroke();
-    box(200, 200, 10);
-    translate(100, 0, 0);    
+    box(200, 10, 200);
+    //translate(100, 0, 0);    
   stroke(255, 0, 0);
-  line(-300, 0, 0, 100, 0, 0);
+  line(-200, 0, 0, 200, 0, 0);
   
   stroke(0, 255, 0);
-  line(-100, -200, 0, -100, 200, 0);
+  line(0, -200, 0, 0, 200, 0);
   
   stroke(0, 0, 255);
-  line(-100, 0, -150, -100, 0, 150);
+  line(0, 0, -200, 0, 0, 200);
   
+  pushMatrix();
+  rotate(0); 
   fill(255, 0, 0, 255);
-   text("x", 10, -5, 0);
+   text("x", 225, 0, 0);
    
     fill(0, 255, 0, 255);
-   text("y", 0, 0, 10);
+   text("y", 0, 225, 0);
    
      fill(0, 0, 255, 255);
-   text("z", -100, 0, 10);
+   text("z", 0, 0, 225);
    
    fill(255, 255, 255, 255);
+   
+   popMatrix();
 
     
 }
