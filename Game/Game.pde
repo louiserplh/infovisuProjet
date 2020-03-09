@@ -2,6 +2,11 @@ float depth = 2000;
 float rX = 0;
 float rZ = 0;
 float rapidity = 0.02;
+float gravityConstant = 1;
+
+PVector gravityForce = new PVector(0, 0);
+PVector location = new PVector(0, -25, 0);
+PVector velocity = new PVector(1, 1);
 
 void settings() {
       size(500, 500, P3D);
@@ -9,37 +14,47 @@ void settings() {
 void setup() { noStroke();
   textSize(32);
   textAlign(CENTER,CENTER);}
-
+  
 void draw() {
   
-  background(200);
-  lights();
+   background(200);
+   lights();
   
-  translate(width/2, height/2, 0);
+   translate(width/2, height/2, 0);
   
    rotateX(rX);
    rotateY(rZ);
    noStroke();
-    box(200, 10, 200);
-    //translate(100, 0, 0);    
-  stroke(255, 0, 0);
-  line(-200, 0, 0, 200, 0, 0);
+   box(200, 10, 200);
+   
+   pushMatrix();
+   
+   translate(location.x, location.y, location.z);
+   noStroke();
+   sphere(20);
+   
+   popMatrix();
+   
+   location.add(velocity);
+   
+   stroke(255, 0, 0);
+   line(-200, 0, 0, 200, 0, 0);
   
-  stroke(0, 255, 0);
-  line(0, -200, 0, 0, 200, 0);
+   stroke(0, 255, 0);
+   line(0, -200, 0, 0, 200, 0);
   
-  stroke(0, 0, 255);
-  line(0, 0, -200, 0, 0, 200);
+   stroke(0, 0, 255);
+   line(0, 0, -200, 0, 0, 200);
   
-  pushMatrix();
-  rotate(0); 
-  fill(255, 0, 0, 255);
+   pushMatrix();
+   rotate(0); 
+   fill(255, 0, 0, 255);
    text("x", 225, 0, 0);
    
-    fill(0, 255, 0, 255);
+   fill(0, 255, 0, 255);
    text("y", 0, 225, 0);
    
-     fill(0, 0, 255, 255);
+   fill(0, 0, 255, 255);
    text("z", 0, 0, 225);
    
    fill(255, 255, 255, 255);
@@ -58,10 +73,10 @@ void mouseDragged() {
     rZ = rZ - rapidity;
   }
   
-  if(pmouseY < mouseY && rX > (-PI/3 + PI/2)) {
+  if(pmouseY < mouseY && rX > (-PI/3)) {
     rX = rX - rapidity;
   }
-  else if(pmouseY > mouseY && rX < (PI/3 + PI/2)) {
+  else if(pmouseY > mouseY && rX < (PI/3)) {
      rX = rX + rapidity;
   }
 }
