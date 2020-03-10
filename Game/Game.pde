@@ -2,11 +2,7 @@ float depth = 2000;
 float rX = 0;
 float rZ = 0;
 float rapidity = 0.02;
-float gravityConstant = 1;
 
-PVector gravityForce = new PVector(0, 0);
-PVector location = new PVector(0, -25, 0);
-PVector velocity = new PVector(1, 1);
 
 //taille de la fenetre
 void settings() {
@@ -33,15 +29,13 @@ void draw() {
    
    //debut dessin sphere
    pushMatrix();
-   
-   translate(location.x, location.y, location.z);
-   noStroke();
-   sphere(10);
-   
+   Ball maBoule = new Ball(); 
+   maBoule.display();
+   maBoule.update();
+   maBoule.checkEdges(); 
    popMatrix();
    //fin dessin sphere
    
-   location.add(velocity);
    
    //axes
    stroke(255, 0, 0);
@@ -56,16 +50,15 @@ void draw() {
   
    //texte relatif aux axes
    pushMatrix();
-   
-   rotate(0); 
+    
    fill(255, 0, 0, 255);
-   text("X", 215, 0, 0);
+   text("x", 215, 0, 0);
    
    fill(0, 255, 0, 255);
-   text("Y", 0, 215, 0);
+   text("y", 0, 215, 0);
    
    fill(0, 0, 255, 255);
-   text("Z", 0, 0, 215);
+   text("z", 0, 0, 215);
    
    fill(255, 255, 255, 255);
    
