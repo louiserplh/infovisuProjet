@@ -9,6 +9,10 @@ class Ball {
   final float gravityConst = 0.8 ; // constante de la gravitation
   final float coefRebon = 0.5 ; // coefficient de rebond
   
+  final float normalForce = 1;
+  final float mu = 0.01; // coeff de friction
+  float frictionMagnitude = normalForce * mu;
+  
   Ball(Plateau monPlato){
     diametreSphere = 10 ; 
     rayonSphere = diametreSphere/2 ;
@@ -22,6 +26,13 @@ class Ball {
   void update(Plateau monPlato){
     gravityForce.set(sin(monPlato.rotationZ)*gravityConst, 0, -sin(monPlato.rotationX)*gravityConst);
     velocity.add(gravityForce);
+    
+    PVector friction = velocity.copy();
+    friction.mult(-1);
+    friction.normalize(); 
+    friction.mult(frictionMagnitude); 
+    
+    velocity.add(friction);
     location.add(velocity);
   }
   
@@ -38,7 +49,7 @@ class Ball {
          location.x = ((monPlato.size)/2-rayonSphere);
        } 
        else if(location.x < -((monPlato.size)/2-rayonSphere)){
-         velocity.x = velocity.x * -coefRebon;
+         velocity.x = (velocity.x * -coefRebon);
          location.x = -((monPlato.size)/2-rayonSphere);
        }
        if(location.z > ((monPlato.size)/2-rayonSphere)) {

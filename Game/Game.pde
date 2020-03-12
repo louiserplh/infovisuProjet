@@ -24,10 +24,12 @@ void draw() {
    //debut dessin plateau
    monPlato.display();
    
-   //debut dessin sphere  
+   //debut dessin sphere
+   pushMatrix();
    maBoule.update(monPlato);
    maBoule.checkEdges(monPlato); 
    maBoule.display();
+   popMatrix();
    
    
    //axes
