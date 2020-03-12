@@ -1,8 +1,8 @@
 float depth = 2000;
 float rX = 0;
 float rZ = 0;
-float rapidity = 0.02;
-
+float rapidity = 0.05;
+Ball maBoule = new Ball();
 
 //taille de la fenetre
 void settings() {
@@ -12,6 +12,7 @@ void setup() {
   noStroke();
   textSize(32);
   textAlign(CENTER,CENTER);
+   
 }
   
 void draw() {
@@ -28,12 +29,12 @@ void draw() {
    //fin dessin plateau 
    
    //debut dessin sphere
-   pushMatrix();
-   Ball maBoule = new Ball(); 
+   //pushMatrix();
+  
    maBoule.update();
    maBoule.display();
    maBoule.checkEdges(); 
-   popMatrix();
+   //popMatrix();
    //fin dessin sphere
    
    
