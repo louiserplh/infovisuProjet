@@ -30,8 +30,8 @@ void draw() {
    //debut dessin sphere
    pushMatrix();
    Ball maBoule = new Ball(); 
-   maBoule.display();
    maBoule.update();
+   maBoule.display();
    maBoule.checkEdges(); 
    popMatrix();
    //fin dessin sphere

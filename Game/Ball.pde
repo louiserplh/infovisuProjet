@@ -17,7 +17,7 @@ class Ball {
   
   
   void update(){
-    gravityForce.set(rZ*gravityConst, 0, -rX*gravityConst);
+    gravityForce.set(sin(rZ)*gravityConst, 0, sin(rX)*gravityConst);
     velocity.add(gravityForce);
     location.add(velocity);
   }
