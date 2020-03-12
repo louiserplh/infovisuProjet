@@ -1,41 +1,33 @@
 float depth = 2000;
-float rX = 0;
-float rZ = 0;
-float rapidity = 0.05;
-Ball maBoule = new Ball();
+float rapidity = 0.02;
+
+Ball maBoule ;
+Plateau monPlato ; 
 
 //taille de la fenetre
 void settings() {
-    size(500, 500, P3D); 
+    size(1000, 1000, P3D); 
 }
+
 void setup() { 
   noStroke();
   textSize(32);
   textAlign(CENTER,CENTER);
-   
+  monPlato = new Plateau();
+  maBoule = new Ball(monPlato);  
 }
   
 void draw() {
   
-   background(200);
-   
-   //debut dessin plateau
-   lights(); 
-   translate(width/2, height/2, 0);
-   rotateX(rX);
-   rotateZ(rZ);
-   noStroke();
-   box(200, 10, 200);
-   //fin dessin plateau 
-   
-   //debut dessin sphere
-   //pushMatrix();
+   background(202);
   
-   maBoule.update();
+   //debut dessin plateau
+   monPlato.display();
+   
+   //debut dessin sphere  
+   maBoule.update(monPlato);
+   maBoule.checkEdges(monPlato); 
    maBoule.display();
-   maBoule.checkEdges(); 
-   //popMatrix();
-   //fin dessin sphere
    
    
    //axes
@@ -65,35 +57,36 @@ void draw() {
    
    popMatrix();
 
+}
+
+
+
+    //rotation du plateau en fonction des axes
+  void mouseDragged() { 
     
-}
-
-  //rotation du plateau en fonction des axes
-void mouseDragged() { 
+    if(pmouseX < mouseX && monPlato.rotationZ < PI/3) {
+      monPlato.rotationZ = monPlato.rotationZ + rapidity; 
+    }
+    else if(pmouseX > mouseX && monPlato.rotationZ > -PI/3) {
+      monPlato.rotationZ = monPlato.rotationZ - rapidity; 
+    }
+    
+    if(pmouseY < mouseY && monPlato.rotationX > (-PI/3)) {
+      monPlato.rotationX = monPlato.rotationX - rapidity; 
+    }
+    else if(pmouseY > mouseY && monPlato.rotationX < (PI/3)) {
+      monPlato.rotationX = monPlato.rotationX + rapidity; }
+  }
   
-  if(pmouseX < mouseX && rZ < PI/3) { //<>//
-    rZ = rZ + rapidity; //<>//
-  }
-  else if(pmouseX > mouseX && rZ > -PI/3) {
-    rZ = rZ - rapidity;
+  
+    // gérer la rapidité de la rotation
+  void mouseWheel(MouseEvent event) { 
+    
+    if (event.getCount() > 0) {
+      rapidity += 0.01;
+    }
+    if (event.getCount() < 0 && rapidity > 0.01) {
+      rapidity -= 0.01;
+    }
   }
   
-  if(pmouseY < mouseY && rX > (-PI/3)) {
-    rX = rX - rapidity;
-  }
-  else if(pmouseY > mouseY && rX < (PI/3)) {
-     rX = rX + rapidity;
-  }
-}
-
-
-  // gérer la rapidité de la rotation
-void mouseWheel(MouseEvent event) { 
-  
-  if (event.getCount() > 0) {
-    rapidity += 0.01;
-  }
-  if (event.getCount() < 0 && rapidity > 0.01) {
-    rapidity -= 0.01;
-  }
-}
