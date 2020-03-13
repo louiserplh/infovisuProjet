@@ -1,5 +1,5 @@
-float depth = 2000;
 float rapidity = 0.02;
+ArrayList<Cylindre> mesCylindres ;
 
 Ball maBoule ;
 Plateau monPlato ; 
@@ -20,10 +20,10 @@ void setup() {
   
 void draw() {
   
-   background(222);
+   background(255);
   
    //debut dessin plateau
-   monPlato.display();
+   monPlato.display(appuierSurShift());
    
    //debut dessin sphere
    pushMatrix();
@@ -34,17 +34,19 @@ void draw() {
    
    
    //axes
-   /*stroke(255, 0, 0);
-   line(-200, 0, 0, 200, 0, 0);
+   stroke(255, 0, 0);
+   line(-monPlato.size, 0, 0, monPlato.size, 0, 0);
   
    stroke(0, 255, 0);
-   line(0, -200, 0, 0, 200, 0);
+   line(0, -monPlato.size, 0, 0, monPlato.size, 0);
   
    stroke(0, 0, 255);
-   line(0, 0, -200, 0, 0, 200);
+   line(0, 0, -monPlato.size, 0, 0, monPlato.size);
    
   
    //texte relatif aux axes
+   
+   /*
    pushMatrix();
     
    fill(255, 0, 0, 255);
@@ -59,10 +61,13 @@ void draw() {
    fill(255, 255, 255, 255);
    
    popMatrix(); 
-   */ 
+  */
    
 }
 
+  boolean appuierSurShift(){
+    return (keyPressed == true && keyCode == SHIFT); 
+  }
 
 
     //rotation du plateau en fonction des axes

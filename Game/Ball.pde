@@ -9,10 +9,10 @@ class Ball {
   final float coefRebon = 0.5 ; // coefficient de rebond
   
   final float normalForce = 1;
-  final float mu = 0.01; // coeff de friction
+  final float mu = 0.05; // coeff de friction
   float frictionMagnitude = normalForce * mu;
   
-  // constructeur de la sphere
+  // constructeur de la sphere`
   Ball(Plateau monPlato){
     diametreSphere = 15 ; 
     
@@ -23,27 +23,35 @@ class Ball {
   
   // methode pour mettre a jour les coordonnees de la sphere
   void update(Plateau monPlato){
-    gravityForce.set(sin(monPlato.rotationZ)*gravityConst, 
-                     0, 
-                     -sin(monPlato.rotationX)*gravityConst);
-    velocity.add(gravityForce);
-    
-    // La friction qui s'applique sur la sphere
-    PVector friction = velocity.copy();
-    friction.mult(-1);
-    friction.normalize(); 
-    friction.mult(frictionMagnitude); 
-    
-    velocity.add(friction);
-    location.add(velocity);
+    if (!appuierSurShift()){
+      gravityForce.set(sin(monPlato.rotationZ)*gravityConst, 
+                       0, //faudrait faire decoller la balle, mais je sais pas comment, oopsi
+                       -sin(monPlato.rotationX)*gravityConst);
+      velocity.add(gravityForce);
+      
+      // La friction qui s'applique sur la sphere
+      PVector friction = velocity.copy();
+      friction.mult(-1);
+      friction.normalize(); 
+      friction.mult(frictionMagnitude); 
+      
+      velocity.add(friction);
+      location.add(velocity);
+    }
   }
   
   // methode pour afficher la sphere
   void display(){
      noStroke(); 
      fill(25); 
-     translate(location.x, location.y, location.z);
-     sphere(diametreSphere); 
+     if (appuierSurShift()){
+       translate(location.x, -(diametreSphere + monPlato.thicc), location.z);
+       sphere(diametreSphere); 
+     }
+     else {
+       translate(location.x, location.y, location.z);
+       sphere(diametreSphere); 
+     }
   }
   
   // methode pour eviter que la sphere parte hors du plateau  

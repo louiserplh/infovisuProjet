@@ -12,14 +12,19 @@ class Plateau {
   }
   
   // methode pour afficher le plateau
-  void display(){
-     stroke(255, 0, 0);
+  void display(boolean appuierSurShift){
+     stroke(0);
      fill(200);
      lights(); 
      translate(width/2, height/2, 0);
-     rotateX(rotationX);
-     rotateZ(rotationZ);
-     box(size, thicc, size);     
+     if (appuierSurShift){
+       rotateX(-PI/2.0);
+     }
+     else {
+       rotateX(rotationX);
+       rotateZ(rotationZ);
+     }
+     box(size, thicc, size);  
   }
 
 }
