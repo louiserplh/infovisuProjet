@@ -6,7 +6,8 @@ Plateau monPlato ;
 
 //taille de la fenetre
 void settings() {
-    size(1000, 1000, P3D); 
+    fullScreen();
+    size(displayWidth, displayHeight, P3D); 
 }
 
 void setup() { 
@@ -19,7 +20,7 @@ void setup() {
   
 void draw() {
   
-   background(202);
+   background(222);
   
    //debut dessin plateau
    monPlato.display();
@@ -33,7 +34,7 @@ void draw() {
    
    
    //axes
-   stroke(255, 0, 0);
+   /*stroke(255, 0, 0);
    line(-200, 0, 0, 200, 0, 0);
   
    stroke(0, 255, 0);
@@ -57,8 +58,9 @@ void draw() {
    
    fill(255, 255, 255, 255);
    
-   popMatrix();
-
+   popMatrix(); 
+   */ 
+   
 }
 
 
