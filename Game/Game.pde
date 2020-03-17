@@ -1,5 +1,5 @@
 float rapidity = 0.02;
-ArrayList<Cylindre> mesCylindres ;
+ArrayList<Cylindre> mesCylindres = new ArrayList<Cylindre>();
 
 Ball maBoule ;
 Plateau monPlato ; 
@@ -23,7 +23,7 @@ void draw() {
    background(255);
   
    //debut dessin plateau
-   monPlato.display(appuierSurShift());
+   monPlato.display(appuierSurShift(), mesCylindres);
    
    //debut dessin sphere
    pushMatrix();
@@ -96,6 +96,12 @@ void draw() {
     }
     if (event.getCount() < 0 && rapidity > 0.01) {
       rapidity -= 0.01;
+    }
+  }
+  
+  void mouseClicked() {
+    if(appuierSurShift() && mouseX <= ((monPlato.size/2)-displayWidth/2)) {
+      mesCylindres.add(new Cylindre(mouseX - displayWidth/2, mouseY - displayHeight/2));
     }
   }
   
