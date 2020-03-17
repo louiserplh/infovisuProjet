@@ -20,7 +20,6 @@ class Plateau {
      
      if (appuierSurShift){
        rotateX(-PI/2.0);
-       
      }
      else {
        rotateX(rotationX);
@@ -28,6 +27,7 @@ class Plateau {
      }
      box(size, thicc, size); 
      
+     // dessiner cylindres
      for(int i = 0; i < mesCylindres.size(); ++i) {
        pushMatrix();
        mesCylindres.get(i).display();

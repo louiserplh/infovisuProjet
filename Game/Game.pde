@@ -99,9 +99,13 @@ void draw() {
     }
   }
   
+     // rajouter un cylindre
   void mouseClicked() {
-    if(appuierSurShift() && mouseX <= ((monPlato.size/2)-displayWidth/2)) {
-      mesCylindres.add(new Cylindre(mouseX - displayWidth/2, mouseY - displayHeight/2));
+    if(appuierSurShift() && mouseX <= ((monPlato.size/2)+displayWidth/2) 
+                         && mouseY <= ((monPlato.size/2)+displayHeight/2)
+                         &&mouseX >= ((-monPlato.size/2)+displayWidth/2)
+                         && mouseY >= (-(monPlato.size/2)+displayHeight/2)) {
+      mesCylindres.add(new Cylindre(mouseX - displayWidth/2, mouseY - displayHeight/2, monPlato.thicc/2));
     }
   }
   
