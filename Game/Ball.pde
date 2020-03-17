@@ -74,4 +74,21 @@ class Ball {
        }
   }
   
+  void checkCylinderCollision(ArrayList<Cylindre> mesCylindres){
+    
+    for(int i = 0; i < mesCylindres.size(); ++i) {
+      
+       float a = pow(location.x - mesCylindres.get(i).position.x,2);
+       float b = pow(location.y - mesCylindres.get(i).position.y,2);
+       
+       if(a+b <= pow(mesCylindres.get(i).rayonCyl,2)){
+               
+         float d = 1;
+         Pvector n = //???
+         Pvector v = n.mult(velocity.dot(n));
+         velocity = velocity.sub(v.mult(2));
+       }
+     }
+  }
+  
 }

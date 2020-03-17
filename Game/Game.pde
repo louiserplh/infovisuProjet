@@ -29,6 +29,7 @@ void draw() {
    pushMatrix();
    maBoule.update(monPlato);
    maBoule.checkEdges(monPlato); 
+   maBoule.checkCylinderCollision(mesCylindres);
    maBoule.display();
    popMatrix();
    
