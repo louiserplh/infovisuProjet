@@ -1,9 +1,9 @@
 class Cylindre {
   
   PVector position; // vecteur coordoonees du cylindre
-  float rayonCyl = 25; // rayon du cylindre
+  float rayonCyl = 20 ; // rayon du cylindre
   float hauteurCyl = 50 ; // hauteur du cylindre
-  int resolutionCyl = 40 ; // resolution du cylindre
+  int resolutionCyl = 30 ; // resolution du cylindre
   
   PShape openCylinder = new PShape();  // corps du cylindre
   PShape cylinBottom = new PShape();  // bas du cylindre
@@ -20,8 +20,8 @@ class Cylindre {
 // initialiser x et y pour tous les points du cylindre
   for(int i = 0; i < x.length; i++) {
      angle = (TWO_PI / resolutionCyl) * i; 
-     x[i] = sin(angle) * resolutionCyl;
-     y[i] = cos(angle) * resolutionCyl;
+     x[i] = sin(angle) * rayonCyl;
+     y[i] = cos(angle) * rayonCyl;
   }
   
   
@@ -59,6 +59,8 @@ class Cylindre {
   
   // methode pour afficher le cylindre
   void display() {
+    stroke(0, 0, 255); 
+    fill(240);
     rotateX(PI/2);
     translate(position.x, position.y, position.z);
     shape(openCylinder);

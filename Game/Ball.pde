@@ -74,19 +74,33 @@ class Ball {
        }
   }
   
+  // methode pour eviter que la balle entre dans les cylindres
+  
   void checkCylinderCollision(ArrayList<Cylindre> mesCylindres){
-    
-    for(int i = 0; i < mesCylindres.size(); ++i) {
+     
+    for (int i = 0 ; i < mesCylindres.size(); ++i) {
       
-       float a = pow(location.x - mesCylindres.get(i).position.x,2);
-       float b = pow(location.y - mesCylindres.get(i).position.y,2);
+       Cylindre monCylindre = mesCylindres.get(i);
        
-       if(a+b <= pow(mesCylindres.get(i).rayonCyl,2)){
-               
-         float d = 1;
-         Pvector n = //???
-         Pvector v = n.mult(velocity.dot(n));
-         velocity = velocity.sub(v.mult(2));
+       //vecteur avec la distance entre la balle et le cylindre pour x et z (on s'en fiche de y)
+       PVector vectDistance = new PVector (location.x - monCylindre.position.x, 0, location.z - monCylindre.position.z);
+       
+       //valeur numerique de la distance
+       float distance = vectDistance.mag(); 
+          
+          
+       // savoir si la sphere entre en collision
+       if(distance <= (diametreSphere + monCylindre.rayonCyl)){
+         location.x = location.x + vectDistance.x ; // (diametreSphere + monCylindre.rayonCyl); 
+         location.z = location.z + vectDistance.z ; // (diametreSphere + monCylindre.rayonCyl); 
+        
+        
+        // reaction a la collision : calcul du rebond sur le cylindre
+        PVector vectNormal = new PVector(location.x - monCylindre.position.x, 0, location.z - monCylindre.position.z); 
+        vectNormal.normalize();     
+        
+        velocity = PVector.sub(velocity, vectNormal.mult(2 * PVector.dot(velocity, vectNormal))) ;  
+     
        }
      }
   }

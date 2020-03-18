@@ -12,7 +12,7 @@ class Plateau {
   }
   
   // methode pour afficher le plateau
-  void display(boolean appuierSurShift, ArrayList<Cylindre> mesCylindres){
+  void display( boolean appuierSurShift){
      stroke(0);
      fill(200);
      lights(); 
@@ -26,13 +26,7 @@ class Plateau {
        rotateZ(rotationZ);
      }
      box(size, thicc, size); 
-     
-     // dessiner cylindres
-     for(int i = 0; i < mesCylindres.size(); ++i) {
-       pushMatrix();
-       mesCylindres.get(i).display();
-       popMatrix();
-     }
+    
   }
   
 
