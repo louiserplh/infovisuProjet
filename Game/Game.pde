@@ -97,8 +97,9 @@ void draw() {
                          && mouseY <= ((monPlato.size/2)+displayHeight/2)
                          && mouseX >= ((-monPlato.size/2)+displayWidth/2)
                          && mouseY >= ((-monPlato.size/2)+displayHeight/2)) {
-        Cylindre cylindre = new Cylindre(mouseX- displayWidth/2, mouseY - displayHeight/2, monPlato.thicc / 2);
-        mesCylindres.add(cylindre); 
+        Cylindre cylindre = new Cylindre(mouseX- displayWidth/2, 0, mouseY - displayHeight/2);
+        cylindre.position.y = -cylindre.hauteurCyl - monPlato.thicc/2;
+        mesCylindres.add(cylindre);
      }
   }
   

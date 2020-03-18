@@ -79,7 +79,7 @@ class Ball {
   void checkCylinderCollision(ArrayList<Cylindre> mesCylindres){
      
     for (int i = 0 ; i < mesCylindres.size(); ++i) {
-      
+         
        Cylindre monCylindre = mesCylindres.get(i);
        
        //vecteur avec la distance entre la balle et le cylindre pour x et z (on s'en fiche de y)
@@ -91,9 +91,7 @@ class Ball {
           
        // savoir si la sphere entre en collision
        if(distance <= (diametreSphere + monCylindre.rayonCyl)){
-         location.x = location.x + vectDistance.x ; // (diametreSphere + monCylindre.rayonCyl); 
-         location.z = location.z + vectDistance.z ; // (diametreSphere + monCylindre.rayonCyl); 
-        
+         
         
         // reaction a la collision : calcul du rebond sur le cylindre
         PVector vectNormal = new PVector(location.x - monCylindre.position.x, 0, location.z - monCylindre.position.z); 
