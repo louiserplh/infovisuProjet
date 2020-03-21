@@ -32,26 +32,12 @@ void draw() {
        popMatrix();
    }
   
-   
    //debut dessin sphere
-   pushMatrix();
    maBoule.update(monPlato);
    maBoule.checkEdges(monPlato);  
-   maBoule.checkCylinderCollision(mesCylindres);
-   maBoule.display();
-   popMatrix();
-   
-   
-   //axes
-   stroke(255, 0, 0);
-   line(-monPlato.size, 0, 0, monPlato.size, 0, 0);
-  
-   stroke(0, 255, 0);
-   line(0, -monPlato.size, 0, 0, monPlato.size, 0);
-  
-   stroke(0, 0, 255);
-   line(0, 0, -monPlato.size, 0, 0, monPlato.size);
-   
+   maBoule.collisionCylindre(mesCylindres);
+   maBoule.display(appuierSurShift());
+      
 }
 
 
@@ -90,16 +76,20 @@ void draw() {
     }
   }
   
-  
-     // rajouter un cylindre
-  void mouseClicked() {
-    if(appuierSurShift() && mouseX <= ((monPlato.size/2)+displayWidth/2) 
+ /* && mouseX <= ((monPlato.size/2)+displayWidth/2) 
                          && mouseY <= ((monPlato.size/2)+displayHeight/2)
                          && mouseX >= ((-monPlato.size/2)+displayWidth/2)
-                         && mouseY >= ((-monPlato.size/2)+displayHeight/2)) {
-        Cylindre cylindre = new Cylindre(mouseX- displayWidth/2, 0, mouseY - displayHeight/2);
+                         && mouseY >= ((-monPlato.size/2)+displayHeight/2)
+                         - displayHeight/2 */
+                         
+     // rajouter un cylindre
+  void mouseClicked() {
+    if(appuierSurShift()) {
+        Cylindre cylindre = new Cylindre(mouseX - displayWidth / 2, 0, mouseY - displayHeight / 2);
         cylindre.position.y = -cylindre.hauteurCyl - monPlato.thicc/2;
+        if(!cylindre.chevauchement(mesCylindres, maBoule) && cylindre.surLePlateau(monPlato)) {
         mesCylindres.add(cylindre);
+        }
      }
   }
   

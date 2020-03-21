@@ -24,27 +24,28 @@ class Ball {
   // methode pour mettre a jour les coordonnees de la sphere
   void update(Plateau monPlato){
     if (!appuierSurShift()){
-      gravityForce.set(sin(monPlato.rotationZ)*gravityConst, 
-                       0, //faudrait faire decoller la balle, mais je sais pas comment, oopsi
-                       -sin(monPlato.rotationX)*gravityConst);
-      velocity.add(gravityForce);
-      
       // La friction qui s'applique sur la sphere
       PVector friction = velocity.copy();
       friction.mult(-1);
       friction.normalize(); 
       friction.mult(frictionMagnitude); 
       
+      gravityForce.set(sin(monPlato.rotationZ)*gravityConst, 
+                       0, //faudrait faire decoller la balle, mais je sais pas comment, oopsi
+                       -sin(monPlato.rotationX)*gravityConst);
+                       
+      velocity.add(gravityForce);
       velocity.add(friction);
       location.add(velocity);
     }
   }
   
   // methode pour afficher la sphere
-  void display(){
+  void display(boolean appuierSurShift){
+    pushMatrix();
      noStroke(); 
      fill(25); 
-     if (appuierSurShift()){
+     if (appuierSurShift){
        translate(location.x, -(diametreSphere + monPlato.thicc), location.z);
        sphere(diametreSphere); 
      }
@@ -52,6 +53,7 @@ class Ball {
        translate(location.x, location.y, location.z);
        sphere(diametreSphere); 
      }
+    popMatrix();
   }
   
   // methode pour eviter que la sphere parte hors du plateau  
@@ -64,6 +66,7 @@ class Ball {
          velocity.x = (velocity.x * -coefRebon);
          location.x = -((monPlato.size)/2-diametreSphere);
        }
+       
        if(location.z > ((monPlato.size)/2-diametreSphere)) {
          velocity.z = velocity.z * -coefRebon;
          location.z = ((monPlato.size)/2-diametreSphere);
@@ -75,8 +78,7 @@ class Ball {
   }
   
   // methode pour eviter que la balle entre dans les cylindres
-  
-  void checkCylinderCollision(ArrayList<Cylindre> mesCylindres){
+  void collisionCylindre(ArrayList<Cylindre> mesCylindres){
      
     for (int i = 0 ; i < mesCylindres.size(); ++i) {
          
@@ -84,23 +86,22 @@ class Ball {
        
        //vecteur avec la distance entre la balle et le cylindre pour x et z (on s'en fiche de y)
        PVector vectDistance = new PVector (location.x - monCylindre.position.x, 0, location.z - monCylindre.position.z);
-       
        //valeur numerique de la distance
        float distance = vectDistance.mag(); 
           
           
        // savoir si la sphere entre en collision
        if(distance <= (diametreSphere + monCylindre.rayonCyl)){
-         
+         location.x = location.x + vectDistance.x ;// (diametreSphere + monCylindre.rayonCyl);
+         location.z = location.z + vectDistance.z ;// (diametreSphere + monCylindre.rayonCyl);
+       }
         
         // reaction a la collision : calcul du rebond sur le cylindre
         PVector vectNormal = new PVector(location.x - monCylindre.position.x, 0, location.z - monCylindre.position.z); 
         vectNormal.normalize();     
         
         velocity = PVector.sub(velocity, vectNormal.mult(2 * PVector.dot(velocity, vectNormal))) ;  
-     
        }
      }
-  }
   
 }

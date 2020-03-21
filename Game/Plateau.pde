@@ -16,6 +16,7 @@ class Plateau {
      stroke(0);
      fill(200);
      lights(); 
+     
      translate(width/2, height/2, 0);
      
      if (appuierSurShift){
@@ -26,8 +27,5 @@ class Plateau {
        rotateZ(rotationZ);
      }
      box(size, thicc, size); 
-    
   }
-  
-
 }
