@@ -33,10 +33,12 @@ void draw() {
    }
   
    //debut dessin sphere
+   pushMatrix();
    maBoule.update(monPlato);
    maBoule.checkEdges(monPlato);  
    maBoule.collisionCylindre(mesCylindres);
    maBoule.display(appuierSurShift());
+   popMatrix();
       
 }
 

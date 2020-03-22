@@ -12,9 +12,12 @@ class Ball {
   final float mu = 0.05; // coeff de friction
   float frictionMagnitude = normalForce * mu;
   
+  Plateau plato;
+  
   // constructeur de la sphere`
   Ball(Plateau monPlato){
     diametreSphere = 15 ; 
+    plato = monPlato;
     
     location = new PVector(0, -(monPlato.thicc/2 + diametreSphere), 0);
     gravityForce = new PVector(0, 0, 0);
@@ -88,20 +91,18 @@ class Ball {
        PVector vectDistance = new PVector (location.x - monCylindre.position.x, 0, location.z - monCylindre.position.z);
        //valeur numerique de la distance
        float distance = vectDistance.mag(); 
+       
+         // reaction a la collision : calcul du vecteur normal
+        PVector vectNormal = new PVector(location.x - monCylindre.position.x, 0, location.z - monCylindre.position.z); 
+        vectNormal.normalize();
           
           
        // savoir si la sphere entre en collision
-       if(distance <= (diametreSphere + monCylindre.rayonCyl)){
-         location.x = location.x + vectDistance.x ;// (diametreSphere + monCylindre.rayonCyl);
-         location.z = location.z + vectDistance.z ;// (diametreSphere + monCylindre.rayonCyl);
-       }
-        
-        // reaction a la collision : calcul du rebond sur le cylindre
-        PVector vectNormal = new PVector(location.x - monCylindre.position.x, 0, location.z - monCylindre.position.z); 
-        vectNormal.normalize();     
+       if(distance <= (diametreSphere + monCylindre.rayonCyl) && vectNormal.x * gravityForce.x <= 0 && vectNormal.y * gravityForce.y <= 0){
         
         velocity = PVector.sub(velocity, vectNormal.mult(2 * PVector.dot(velocity, vectNormal))) ;  
-       }
+       
      }
-  
+    }
+  }
 }
