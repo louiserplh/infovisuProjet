@@ -12,6 +12,8 @@ class Ball {
   final float mu = 0.05; // coeff de friction
   float frictionMagnitude = normalForce * mu;
   
+  boolean enContact = false;
+  
   Plateau plato;
   
   // constructeur de la sphere`
@@ -36,10 +38,11 @@ class Ball {
       gravityForce.set(sin(monPlato.rotationZ)*gravityConst, 
                        0, //faudrait faire decoller la balle, mais je sais pas comment, oopsi
                        -sin(monPlato.rotationX)*gravityConst);
-                       
+
       velocity.add(gravityForce);
       velocity.add(friction);
       location.add(velocity);
+      
     }
   }
   
@@ -96,12 +99,11 @@ class Ball {
         PVector vectNormal = new PVector(location.x - monCylindre.position.x, 0, location.z - monCylindre.position.z); 
         vectNormal.normalize();
           
-          
+        float angleSep = PVector.angleBetween(vectNormal, velocity); // angle between normal vector and velocity
        // savoir si la sphere entre en collision
-       if(distance <= (diametreSphere + monCylindre.rayonCyl) && vectNormal.x * gravityForce.x <= 0 && vectNormal.y * gravityForce.y <= 0){
-        
-        velocity = PVector.sub(velocity, vectNormal.mult(2 * PVector.dot(velocity, vectNormal))) ;  
-       
+       if(distance <= (diametreSphere + monCylindre.rayonCyl) && angleSep >= PI/2){
+         
+        velocity = PVector.sub(velocity, vectNormal.mult(2 * PVector.dot(velocity, vectNormal))) ; 
      }
     }
   }
