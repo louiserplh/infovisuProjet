@@ -77,12 +77,6 @@ void draw() {
       rapidity -= 0.01;
     }
   }
-  
- /* && mouseX <= ((monPlato.size/2)+displayWidth/2) 
-                         && mouseY <= ((monPlato.size/2)+displayHeight/2)
-                         && mouseX >= ((-monPlato.size/2)+displayWidth/2)
-                         && mouseY >= ((-monPlato.size/2)+displayHeight/2)
-                         - displayHeight/2 */
                          
      // rajouter un cylindre
   void mouseClicked() {

@@ -96,14 +96,18 @@ class Ball {
        float distance = vectDistance.mag(); 
        
          // reaction a la collision : calcul du vecteur normal
-        PVector vectNormal = new PVector(location.x - monCylindre.position.x, 0, location.z - monCylindre.position.z); 
-        vectNormal.normalize();
+        PVector vectNormal = new PVector(location.x - monCylindre.position.x, 0, location.z - monCylindre.position.z).normalize(); 
           
         float angleSep = PVector.angleBetween(vectNormal, velocity); // angle between normal vector and velocity
+        PVector pos = monCylindre.position;
+ 
        // savoir si la sphere entre en collision
        if(distance <= (diametreSphere + monCylindre.rayonCyl) && angleSep >= PI/2){
          
         velocity = PVector.sub(velocity, vectNormal.mult(2 * PVector.dot(velocity, vectNormal))) ; 
+        location.x = pos.x + (diametreSphere + monCylindre.rayonCyl) ;
+        location.z = pos.z + (diametreSphere + monCylindre.rayonCyl);
+        
      }
     }
   }
