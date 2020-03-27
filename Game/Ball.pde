@@ -105,8 +105,6 @@ class Ball {
        if(distance <= (diametreSphere + monCylindre.rayonCyl) && angleSep >= PI/2){
          
         velocity = PVector.sub(velocity, vectNormal.mult(2 * PVector.dot(velocity, vectNormal))) ; 
-        location.x = pos.x + (diametreSphere + monCylindre.rayonCyl) ;
-        location.z = pos.z + (diametreSphere + monCylindre.rayonCyl);
         
      }
     }

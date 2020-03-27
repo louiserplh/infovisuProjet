@@ -4,6 +4,9 @@ float rapidity = 0.02;
 Ball maBoule ;
 Plateau monPlato ; 
 ArrayList<Cylindre> mesCylindres ; 
+ParticleSystem cylindres;
+
+boolean wasInitialised = false;
 
 //taille de la fenetre
 void settings() {
@@ -25,11 +28,19 @@ void draw() {
    //debut dessin plateau
    monPlato.display(appuierSurShift());
    
+   
+   if(wasInitialised) {
+  float deciSeconds = (frameCount/frameRate) * 10;
+  if(int(deciSeconds) % 5 == 0) {
+    cylindres.addParticle();
+  }
+   
    //dessin cylindre
    for (int i = 0 ; i < mesCylindres.size(); ++i) {
        pushMatrix();
        mesCylindres.get(i).display();
        popMatrix();
+   }
    }
   
    //debut dessin sphere
@@ -81,11 +92,18 @@ void draw() {
      // rajouter un cylindre
   void mouseClicked() {
     if(appuierSurShift()) {
+      
+      PVector origin = new PVector(mouseX - displayWidth / 2, 0, mouseY - displayHeight / 2);
+      cylindres = new ParticleSystem(origin, monPlato, maBoule);
+      wasInitialised = true;
+      
+      /**
         Cylindre cylindre = new Cylindre(mouseX - displayWidth / 2, 0, mouseY - displayHeight / 2);
         cylindre.position.y = -cylindre.hauteurCyl - monPlato.thicc/2;
         if(!cylindre.chevauchement(mesCylindres, maBoule) && cylindre.surLePlateau(monPlato)) {
         mesCylindres.add(cylindre);
+        **/
         }
-     }
-  }
+    }
+  
   
