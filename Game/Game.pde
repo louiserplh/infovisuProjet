@@ -1,9 +1,8 @@
 float rapidity = 0.02;
 
 
-Ball maBoule ;
-Plateau monPlato ; 
-ArrayList<Cylindre> mesCylindres ; 
+Ball maBoule;
+Plateau monPlato; 
 ParticleSystem cylindres;
 
 boolean wasInitialised = false;
@@ -17,8 +16,7 @@ void settings() {
 void setup() { 
   textSize(32);
   monPlato = new Plateau();
-  mesCylindres = new ArrayList<Cylindre>();
-  maBoule = new Ball(monPlato);  
+  maBoule = new Ball(monPlato); 
 }
   
 void draw() {
@@ -36,9 +34,9 @@ void draw() {
   }
    
    //dessin cylindre
-   for (int i = 0 ; i < mesCylindres.size(); ++i) {
+   for (int i = 0 ; i < cylindres.mesCylindres.size(); ++i) {
        pushMatrix();
-       mesCylindres.get(i).display();
+       cylindres.run();
        popMatrix();
    }
    }
@@ -47,7 +45,7 @@ void draw() {
    pushMatrix();
    maBoule.update(monPlato);
    maBoule.checkEdges(monPlato);  
-   maBoule.collisionCylindre(mesCylindres);
+   //maBoule.collisionCylindre(cylindres.mesCylindres);
    maBoule.display(appuierSurShift());
    popMatrix();
       
@@ -93,7 +91,9 @@ void draw() {
   void mouseClicked() {
     if(appuierSurShift()) {
       
-      PVector origin = new PVector(mouseX - displayWidth / 2, 0, mouseY - displayHeight / 2);
+      PVector origin = new PVector(mouseX - displayWidth / 2,
+                                   -50 - monPlato.thicc/2,
+                                   mouseY - displayHeight / 2);
       cylindres = new ParticleSystem(origin, monPlato, maBoule);
       wasInitialised = true;
       

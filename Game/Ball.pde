@@ -1,4 +1,3 @@
-
 class Ball {
   
   PVector gravityForce ;
@@ -84,11 +83,7 @@ class Ball {
   }
   
   // methode pour eviter que la balle entre dans les cylindres
-  void collisionCylindre(ArrayList<Cylindre> mesCylindres){
-     
-    for (int i = 0 ; i < mesCylindres.size(); ++i) {
-         
-       Cylindre monCylindre = mesCylindres.get(i);
+  boolean collisionCylindre(Cylindre monCylindre){
        
        //vecteur avec la distance entre la balle et le cylindre pour x et z (on s'en fiche de y)
        PVector vectDistance = new PVector (location.x - monCylindre.position.x, 0, location.z - monCylindre.position.z);
@@ -105,8 +100,8 @@ class Ball {
        if(distance <= (diametreSphere + monCylindre.rayonCyl) && angleSep >= PI/2){
          
         velocity = PVector.sub(velocity, vectNormal.mult(2 * PVector.dot(velocity, vectNormal))) ; 
-        
+        return true;
      }
-    }
+     return false;
   }
 }
