@@ -5,14 +5,16 @@ class ParticleSystem {
   Ball ball;
   Plateau plateau;
   float rayonCyl;
+  PShape evil;
   
-  ParticleSystem(PVector origin, Plateau plateau, Ball ball) {
+  ParticleSystem(PVector origin, Plateau plateau, Ball ball,PShape evil) {
     this.origin = origin.copy();
     mesCylindres = new ArrayList<Cylindre>();
     mesCylindres.add(new Cylindre(origin.x, origin.y, origin.z));
     this.plateau = plateau;
     this.ball = ball;
     this.rayonCyl = mesCylindres.get(0).rayonCyl;
+    this.evil = evil;
   }
   
   void addParticle() {
@@ -40,15 +42,16 @@ class ParticleSystem {
  }
   void run(){
     
-    for(int i=0; i<mesCylindres.size();++i){
+    mesCylindres.get(0).display();
+    shape(evil,origin.x,origin.z);
+    if(ball.collisionCylindre(mesCylindres.get(0))){
+      mesCylindres.clear();
+    }
+    
+    for(int i=1; i<mesCylindres.size();++i){
       mesCylindres.get(i).display();
       if(ball.collisionCylindre(mesCylindres.get(i))){
-        if(i==0){
-          mesCylindres.clear();
-        }
-        else{
           mesCylindres.remove(i);
-        }
       }
     }
   }

@@ -4,6 +4,7 @@ float rapidity = 0.02;
 Ball maBoule;
 Plateau monPlato; 
 ParticleSystem cylindres;
+PShape evil;
 
 boolean wasInitialised = false;
 
@@ -16,7 +17,11 @@ void settings() {
 void setup() { 
   textSize(32);
   monPlato = new Plateau();
-  maBoule = new Ball(monPlato); 
+  maBoule = new Ball(monPlato);
+  PImage img = loadImage("robotnik.png");
+  evil = loadShape("robotnik.obj");
+  texture(img);
+  
 }
   
 void draw() {
@@ -94,7 +99,7 @@ void draw() {
       PVector origin = new PVector(mouseX - displayWidth / 2,
                                    -50 - monPlato.thicc/2,
                                    mouseY - displayHeight / 2);
-      cylindres = new ParticleSystem(origin, monPlato, maBoule);
+      cylindres = new ParticleSystem(origin, monPlato, maBoule,evil);
       wasInitialised = true;
       
       /**
