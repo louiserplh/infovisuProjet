@@ -46,7 +46,9 @@ class ParticleSystem {
         if(i==0){
           mesCylindres.clear();
         }
+        else{
           mesCylindres.remove(i);
+        }
       }
     }
   }

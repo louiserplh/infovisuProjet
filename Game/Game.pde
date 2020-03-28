@@ -29,7 +29,7 @@ void draw() {
    
    if(wasInitialised) {
   float deciSeconds = (frameCount/frameRate) * 10;
-  if(int(deciSeconds) % 5 == 0) {
+  if(int(deciSeconds) % 7 == 0) {
     cylindres.addParticle();
   }
    
