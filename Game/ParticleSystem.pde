@@ -43,7 +43,7 @@ class ParticleSystem {
   void run(){
     
     mesCylindres.get(0).display();
-    shape(evil,origin.x,origin.z);
+    shape(evil,origin.x,origin.y);
     if(ball.collisionCylindre(mesCylindres.get(0))){
       mesCylindres.clear();
     }
