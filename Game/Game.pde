@@ -20,23 +20,30 @@ void setup() {
   maBoule = new Ball(monPlato);
   PImage img = loadImage("robotnik.png");
   evil = loadShape("robotnik.obj");
-  texture(img);
+  evil.setTexture(img);
   
 }
   
 void draw() {
   
+  
    background(255);
+   int s = 0;
  
    //debut dessin plateau
    monPlato.display(appuierSurShift());
    
    
    if(wasInitialised) {
-  float deciSeconds = (frameCount/frameRate) * 10;
-  if(int(deciSeconds) % 7 == 0) {
+
+    int newS = int(frameCount/frameRate);
+    
+    if(newS != s) {
+
     cylindres.addParticle();
-  }
+    }
+  
+    s = int(frameCount/frameRate);
    
    //dessin cylindre
    for (int i = 0 ; i < cylindres.mesCylindres.size(); ++i) {
@@ -61,7 +68,6 @@ void draw() {
   boolean appuierSurShift(){
     return (keyPressed == true && keyCode == SHIFT); 
   }
-
 
     //rotation du plateau en fonction des axes
   void mouseDragged() { 
@@ -99,8 +105,10 @@ void draw() {
       PVector origin = new PVector(mouseX - displayWidth / 2,
                                    -50 - monPlato.thicc/2,
                                    mouseY - displayHeight / 2);
-      cylindres = new ParticleSystem(origin, monPlato, maBoule,evil);
-      wasInitialised = true;
+      if(monPlato.surLePlateau(origin)) {        
+        cylindres = new ParticleSystem(origin, monPlato, maBoule,evil);
+        wasInitialised = true;
+      }
       
       /**
         Cylindre cylindre = new Cylindre(mouseX - displayWidth / 2, 0, mouseY - displayHeight / 2);

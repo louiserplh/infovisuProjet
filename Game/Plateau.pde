@@ -28,4 +28,9 @@ class Plateau {
      }
      box(size, thicc, size); 
   }
+  
+   boolean surLePlateau(PVector origin){
+    return ((abs(origin.x) <= this.size / 2 ) &&
+             abs(origin.z) <= this.size / 2 ) ; 
+   }
 }
