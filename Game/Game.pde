@@ -1,3 +1,12 @@
+  /*
+  *  Game.pde  
+  *  Classe principale du jeu
+  *  Groupe Q : 
+  *     BIANCHI Elisa 300928     ;
+  *     DENOVE Emmanuelle 301576 ;
+  *     RIEUPOUILH Louise 299418 ;
+  */
+  
   Ball maBoule;
   Plateau monPlato; 
   ParticleSystem cylindres;

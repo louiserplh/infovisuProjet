@@ -1,8 +1,19 @@
+  /*
+  *  Ball.pde  
+  *  Classe pour gerer la balle dans le jeu
+  *  Groupe Q : 
+  *     BIANCHI Elisa 300928     ;
+  *     DENOVE Emmanuelle 301576 ;
+  *     RIEUPOUILH Louise 299418 ;
+  */
+  
+
 class Ball {
   
   PVector gravityForce ;
   PVector location ;
   PVector velocity ;
+  PShape sphere ; 
   final int diametreSphere ; //diametre de la sphere 
   final float gravityConst = 0.4 ; // constante de la gravitation
   final float coefRebon = 0.5 ; // coefficient de rebond
@@ -46,14 +57,22 @@ class Ball {
   void display(boolean appuierSurShift){
     pushMatrix();
      noStroke(); 
-     fill(0, 125, 250); 
+     fill(255); 
+     PImage beachball = loadImage("BeachBall.png");
+     float angle = atan2(location.z, -location.x);
+     
      if (appuierSurShift){
        translate(location.x, -(diametreSphere + monPlato.thicc), location.z);
-       sphere(diametreSphere); 
+       sphere = createShape(SPHERE, diametreSphere); 
+       sphere.setTexture(beachball);
+       shape(sphere);
      }
      else {
        translate(location.x, location.y, location.z);
-       sphere(diametreSphere); 
+       sphere = createShape(SPHERE, diametreSphere); 
+       sphere.setTexture(beachball);
+       rotate(angle*PI);
+       shape(sphere);
      }
     popMatrix();
   }

@@ -1,8 +1,18 @@
+  /*
+  *  Plateau.pde  
+  *  Classe pour gerer le plateau principal du jeu
+  *  Groupe Q : 
+  *     BIANCHI Elisa 300928     ;
+  *     DENOVE Emmanuelle 301576 ;
+  *     RIEUPOUILH Louise 299418 ;
+  */
+
+
 class Plateau {
 
   float rotationX ; // rotation de l'angle X
   float rotationZ ; // rotation de l'angle Z
-  final float size = 350 ; // taille d'un cote du plateau [car c'est un carree] 
+  final float size = 400 ; // taille d'un cote du plateau [car c'est un carree] 
   final float thicc = 20 ; // epaisseur du plateau
 
   // constructeur du plateau

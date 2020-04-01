@@ -1,3 +1,13 @@
+  /*
+  *  ParticleSystem.pde  
+  *  Classe pour gerer la creation des particules dans le jeu
+  *  Groupe Q : 
+  *     BIANCHI Elisa 300928     ;
+  *     DENOVE Emmanuelle 301576 ;
+  *     RIEUPOUILH Louise 299418 ;
+  */
+
+
 class ParticleSystem {
   
   PVector origin;  // Origine du systeme
@@ -45,20 +55,20 @@ class ParticleSystem {
     }
  }
  
- // methode pour mettre faire tourner le systeme de gestion des particules 
+  // methode pour mettre faire tourner le systeme de gestion des particules 
   void run(){
     if(mesCylindres.size() > 0) {
     
       mesCylindres.get(0).display();
       
       pushMatrix();
-        float angle = atan2(mesCylindres.get(0).position.z - ball.location.z , mesCylindres.get(0).position.x - ball.location.x );
+        float angle = atan2(mesCylindres.get(0).position.z - ball.location.z , mesCylindres.get(0).position.x - ball.location.x ); // angle entre la sphere et le mechant
         translate(mesCylindres.get(0).position.x, 
                   -mesCylindres.get(0).hauteurCyl - plateau.thicc/2, 
                   mesCylindres.get(0).position.z);
         scale(50);
         rotateX(PI);
-        rotateY(angle - PI/2); 
+        rotateY(angle - PI/2); // rotation de Y pour que le mechant regarde la sphere en tout temps 
         shape(evil);
       popMatrix();
       

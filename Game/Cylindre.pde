@@ -1,3 +1,13 @@
+  /*
+  *  Cylindre.pde  
+  *  Classe pour gerer les cylindres dans le jeu
+  *  Groupe Q : 
+  *     BIANCHI Elisa 300928     ;
+  *     DENOVE Emmanuelle 301576 ;
+  *     RIEUPOUILH Louise 299418 ;
+  */
+  
+
 class Cylindre {
   
   PVector position; // vecteur coordoonees du cylindre
