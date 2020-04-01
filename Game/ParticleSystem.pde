@@ -71,5 +71,10 @@ class ParticleSystem {
         }
       }
      }
+     
+     PVector vectBall = ball.location ;
+     PVector vectCylOrigin = origin ; 
+     float angle = PVector.angleBetween(vectBall, vectCylOrigin);
+     evil.rotateY(radians(angle));
   }
 }
