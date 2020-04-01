@@ -5,7 +5,10 @@ Ball maBoule;
 Plateau monPlato; 
 ParticleSystem cylindres;
 PShape evil;
+int timeStart ; 
+int timeElapsed ; 
 
+boolean timeReset = true ;
 boolean wasInitialised = false;
 
 //taille de la fenetre
@@ -21,7 +24,6 @@ void setup() {
   PImage img = loadImage("robotnik.png");
   evil = loadShape("robotnik.obj");
   evil.setTexture(img);
-  
 }
   
 void draw() {
@@ -31,14 +33,20 @@ void draw() {
  
    //debut dessin plateau
    monPlato.display(appuierSurShift());
-    println(millis()/10);
    
    if(wasInitialised) {
-    
-    if((millis()/10 % 50) == 0) {
- 
+     
+     if(timeReset){
+       timeStart = millis() ;
+       timeReset = false ;
+     }
+     
+     timeElapsed = millis() - timeStart ;
+   
+     if(timeElapsed > 499) {
       println("je veux en ajouter un");
       cylindres.addParticle();
+      timeReset = true ; 
     }
    
    //dessin cylindre
