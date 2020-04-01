@@ -38,7 +38,7 @@ class ParticleSystem {
     
     Cylindre cyl = new Cylindre(center.x, origin.y, center.z);
     if(cyl.surLePlateau(plateau) && !cyl.chevauchement(mesCylindres, ball)){
-      println("entered if ps");
+      println("done ajout");
       mesCylindres.add(cyl);
       i = numAttempts; 
     } 

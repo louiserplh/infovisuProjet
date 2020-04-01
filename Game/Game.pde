@@ -28,22 +28,18 @@ void draw() {
   
   
    background(255);
-   int s = 0;
  
    //debut dessin plateau
    monPlato.display(appuierSurShift());
-   
+    println(millis()/10);
    
    if(wasInitialised) {
-
-    int newS = int(frameCount/frameRate);
     
-    if(newS != s) {
-
-    cylindres.addParticle();
+    if((millis()/10 % 50) == 0) {
+ 
+      println("je veux en ajouter un");
+      cylindres.addParticle();
     }
-  
-    s = int(frameCount/frameRate);
    
    //dessin cylindre
    for (int i = 0 ; i < cylindres.mesCylindres.size(); ++i) {
