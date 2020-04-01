@@ -52,11 +52,13 @@ class ParticleSystem {
       mesCylindres.get(0).display();
       
       pushMatrix();
+        float angle = atan2(mesCylindres.get(0).position.z - ball.location.z , mesCylindres.get(0).position.x - ball.location.x );
         translate(mesCylindres.get(0).position.x, 
                   -mesCylindres.get(0).hauteurCyl - plateau.thicc/2, 
                   mesCylindres.get(0).position.z);
         scale(50);
         rotateX(PI);
+        rotateY(angle - PI/2); 
         shape(evil);
       popMatrix();
       
@@ -71,10 +73,5 @@ class ParticleSystem {
         }
       }
      }
-     
-     PVector vectBall = ball.location ;
-     PVector vectCylOrigin = origin ; 
-     float angle = PVector.angleBetween(vectBall, vectCylOrigin);
-     evil.rotateY(radians(angle));
   }
 }
