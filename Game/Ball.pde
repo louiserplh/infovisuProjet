@@ -7,18 +7,15 @@ class Ball {
   final float gravityConst = 0.4 ; // constante de la gravitation
   final float coefRebon = 0.5 ; // coefficient de rebond
   
-  final float normalForce = 1;
+  final float normalForce = 1; // froce normale
   final float mu = 0.05; // coeff de friction
   float frictionMagnitude = normalForce * mu;
   
   boolean enContact = false;
-  
-  Plateau plato;
-  
+ 
   // constructeur de la sphere`
   Ball(Plateau monPlato){
     diametreSphere = 15 ; 
-    plato = monPlato;
     
     location = new PVector(0, -(monPlato.thicc/2 + diametreSphere), 0);
     gravityForce = new PVector(0, 0, 0);
@@ -35,7 +32,7 @@ class Ball {
       friction.mult(frictionMagnitude); 
       
       gravityForce.set(sin(monPlato.rotationZ)*gravityConst, 
-                       0, //faudrait faire decoller la balle, mais je sais pas comment, oopsi
+                       0,
                        -sin(monPlato.rotationX)*gravityConst);
 
       velocity.add(gravityForce);
@@ -49,7 +46,7 @@ class Ball {
   void display(boolean appuierSurShift){
     pushMatrix();
      noStroke(); 
-     fill(25); 
+     fill(0, 125, 250); 
      if (appuierSurShift){
        translate(location.x, -(diametreSphere + monPlato.thicc), location.z);
        sphere(diametreSphere); 
@@ -61,7 +58,7 @@ class Ball {
     popMatrix();
   }
   
-  // methode pour eviter que la sphere parte hors du plateau  
+  // methode pour eviter que la sphere sorte hors du plateau  
   void checkEdges(Plateau monPlato){
       if(location.x > ((monPlato.size/2)-diametreSphere)) {
          velocity.x = velocity.x * -coefRebon;
@@ -84,21 +81,14 @@ class Ball {
   
   // methode pour eviter que la balle entre dans les cylindres
   boolean collisionCylindre(Cylindre monCylindre){
-       
-       //vecteur avec la distance entre la balle et le cylindre pour x et z (on s'en fiche de y)
-       PVector vectDistance = new PVector (location.x - monCylindre.position.x, 0, location.z - monCylindre.position.z);
-       //valeur numerique de la distance
-       float distance = vectDistance.mag(); 
-       
-         // reaction a la collision : calcul du vecteur normal
-        PVector vectNormal = new PVector(location.x - monCylindre.position.x, 0, location.z - monCylindre.position.z).normalize(); 
-          
-        float angleSep = PVector.angleBetween(vectNormal, velocity); // angle between normal vector and velocity
-        PVector pos = monCylindre.position;
+      
+       PVector vectDistance = new PVector (location.x - monCylindre.position.x, 0, location.z - monCylindre.position.z);           //Vecteur avec la distance entre la balle et le cylindre pour x et z 
+       float distance = vectDistance.mag();                                                                                        //Valeur numerique de la distance
+       PVector vectNormal = new PVector(location.x - monCylindre.position.x, 0, location.z - monCylindre.position.z).normalize();  //Reaction a la collision : calcul du vecteur normal        
+       float angleSep = PVector.angleBetween(vectNormal, velocity);                                                                //Angle entre le veteur normal et la velocity
  
        // savoir si la sphere entre en collision
        if(distance <= (diametreSphere + monCylindre.rayonCyl) && angleSep >= PI/2){
-         
         velocity = PVector.sub(velocity, vectNormal.mult(2 * PVector.dot(velocity, vectNormal))) ; 
         return true;
      }

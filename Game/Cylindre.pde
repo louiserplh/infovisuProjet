@@ -3,7 +3,7 @@ class Cylindre {
   PVector position; // vecteur coordoonees du cylindre
   float rayonCyl = 20 ; // rayon du cylindre
   float hauteurCyl = 50 ; // hauteur du cylindre
-  int resolutionCyl = 30 ; // resolution du cylindre
+  int resolutionCyl = 20 ; // resolution du cylindre
   
   float angle; // angle pour la construction du cylindre
   float[] x = new float[resolutionCyl + 1]; // variable pour la construction du cylindre
@@ -12,18 +12,17 @@ class Cylindre {
   PShape openCylinder = new PShape();  // corps du cylindre
   PShape cylinBottom = new PShape();  // bas du cylindre
   PShape cylinTop = new PShape();  // haut du cylindre
-  PShape cylinEntier = new PShape(); // cylindre assemblee
+  PShape cylinEntier = new PShape(); // cylindre complet
   
  
-  // initialiser cylindre
+  // constructeur du cylindre
   Cylindre(float xBase, float yBase, float zBase) {
-    stroke(0) ; 
-    fill(222) ;
+    stroke(255, 200, 0) ; 
+    fill(255, 0, 0) ;
     lights() ; 
-    
-  position = new PVector(xBase, yBase, zBase);
+    position = new PVector(xBase, yBase, zBase);
  
-// initialiser x et y pour tous les points du cylindre
+  // initialiser x et y pour tous les points du cylindre
   for(int i = 0; i < x.length; i++) {
      angle = (TWO_PI / resolutionCyl) * i; 
      x[i] = sin(angle) * rayonCyl;
@@ -62,7 +61,6 @@ class Cylindre {
    cylinEntier.addChild(cylinBottom);
    cylinEntier.addChild(openCylinder);
    cylinEntier.addChild(cylinTop);
-   
   }
   
   // methode pour afficher le cylindre
@@ -73,13 +71,13 @@ class Cylindre {
     popMatrix();
   }
 
-  
+  // methode pour s'assurer que le cylindre se situe sur le plateau
   boolean surLePlateau(Plateau plateau){
     return ((abs(position.x) <= plateau.size / 2 ) &&
              abs(position.z) <= plateau.size / 2 ) ; 
    }
    
-   
+   // methode pour s'assurer que deux cylindres ne se superposent pas
    boolean chevauchement(ArrayList<Cylindre> mesCylindres, Ball ball){
        PVector vectDistanceBall = new PVector (position.x - ball.location.x, 0, position.z - ball.location.z);
        float distanceBalle = vectDistanceBall.mag(); 
