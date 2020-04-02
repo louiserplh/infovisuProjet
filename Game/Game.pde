@@ -10,7 +10,10 @@
   Ball maBoule;
   Plateau monPlato; 
   ParticleSystem cylindres;
+  
   PShape evil;
+  PGraphics gameSurface ; 
+  
   float timeStart ; 
   float timeElapsed ; 
   
@@ -28,6 +31,7 @@
   // initialisation des elements de jeu
   void setup() { 
     textSize(32);
+    gameSurface = createGraphics(width, height-300); 
     monPlato = new Plateau();
     maBoule = new Ball(monPlato);
     PImage img = loadImage("robotnik.png");
@@ -36,8 +40,14 @@
   }
    
   void draw() {
-    
-     background(255);
+    drawGame();
+    image(gameSurface, 0, 0);
+  }
+  
+  void drawGame(){
+      
+      gameSurface.beginDraw();
+      gameSurface.background(255);
    
      // dessin plateau
      monPlato.display(appuierSurShift());
@@ -66,6 +76,8 @@
      maBoule.update(monPlato);
      maBoule.checkEdges(monPlato);  
      maBoule.display(appuierSurShift());
+    
+    gameSurface.endDraw();
   }
   
   
