@@ -23,10 +23,12 @@ class Ball {
   float frictionMagnitude = normalForce * mu;
   
   boolean enContact = false;
+  PGraphics pg;
  
   // constructeur de la sphere`
-  Ball(Plateau monPlato){
+  Ball(Plateau monPlato, PGraphics pg){
     diametreSphere = 15 ; 
+    this.pg = pg;
     
     location = new PVector(0, -(monPlato.thicc/2 + diametreSphere), 0);
     gravityForce = new PVector(0, 0, 0);
@@ -55,26 +57,28 @@ class Ball {
   
   // methode pour afficher la sphere
   void display(boolean appuierSurShift){
-    pushMatrix();
-     noStroke(); 
-     fill(255); 
+    pg.beginDraw();
+    pg.pushMatrix();
+     pg.noStroke(); 
+     pg.fill(255); 
      PImage beachball = loadImage("BeachBall.png");
      float angle = atan2(location.z, -location.x);
      
      if (appuierSurShift){
-       translate(location.x, -(diametreSphere + monPlato.thicc), location.z);
-       sphere = createShape(SPHERE, diametreSphere); 
+       pg.translate(location.x, -(diametreSphere + monPlato.thicc), location.z);
+       sphere = pg.createShape(SPHERE, diametreSphere); 
        sphere.setTexture(beachball);
-       shape(sphere);
+       pg.shape(sphere);
      }
      else {
-       translate(location.x, location.y, location.z);
-       sphere = createShape(SPHERE, diametreSphere); 
+       pg.translate(location.x + width/2, location.y + height/2, location.z);
+       sphere = pg.createShape(SPHERE, diametreSphere); 
        sphere.setTexture(beachball);
-       rotate(angle*PI);
-       shape(sphere);
+       pg.rotate(angle*PI);
+       pg.shape(sphere);
      }
-    popMatrix();
+    pg.popMatrix();
+    pg.endDraw();
   }
   
   // methode pour eviter que la sphere sorte hors du plateau  

@@ -6,13 +6,14 @@
   *     DENOVE Emmanuelle 301576 ;
   *     RIEUPOUILH Louise 299418 ;
   */
+ 
+  
+  PShape evil;
+  PGraphics gameSurface ; 
   
   Ball maBoule;
   Plateau monPlato; 
   ParticleSystem cylindres;
-  
-  PShape evil;
-  PGraphics gameSurface ; 
   
   float timeStart ; 
   float timeElapsed ; 
@@ -31,9 +32,9 @@
   // initialisation des elements de jeu
   void setup() { 
     textSize(32);
-    gameSurface = createGraphics(width, height-300); 
-    monPlato = new Plateau();
-    maBoule = new Ball(monPlato);
+    gameSurface = createGraphics(width, height-300, P3D); 
+    monPlato = new Plateau(gameSurface);
+    maBoule = new Ball(monPlato, gameSurface);
     PImage img = loadImage("robotnik.png");
     evil = loadShape("robotnik.obj");
     evil.setTexture(img);
@@ -50,7 +51,7 @@
       gameSurface.background(255);
    
      // dessin plateau
-     monPlato.display(appuierSurShift());
+      monPlato.display(appuierSurShift());
      
      if(wasInitialised) {
        if(timeReset){
