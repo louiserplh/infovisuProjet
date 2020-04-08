@@ -23,12 +23,10 @@ class Ball {
   float frictionMagnitude = normalForce * mu;
   
   boolean enContact = false;
-  PGraphics pg;
  
   // constructeur de la sphere`
-  Ball(Plateau monPlato, PGraphics pg){
+  Ball(Plateau monPlato){
     diametreSphere = 15 ; 
-    this.pg = pg;
     
     location = new PVector(0, -(monPlato.thicc/2 + diametreSphere), 0);
     gravityForce = new PVector(0, 0, 0);
@@ -56,7 +54,7 @@ class Ball {
   }
   
   // methode pour afficher la sphere
-  void display(boolean appuierSurShift){
+  void display(boolean appuierSurShift,PGraphics pg){
     pg.beginDraw();
     pg.pushMatrix();
      pg.noStroke(); 

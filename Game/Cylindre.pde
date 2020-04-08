@@ -74,11 +74,13 @@ class Cylindre {
   }
   
   // methode pour afficher le cylindre
-  void display() {
-    pushMatrix();
-    translate(position.x, position.y, position.z);
-    shape(cylinEntier);
-    popMatrix();
+  void display(PGraphics pg) {
+    pg.beginDraw();
+    pg.pushMatrix();
+    pg.translate(position.x, position.y, position.z);
+    pg.shape(cylinEntier);
+    pg.popMatrix();
+    pg.endDraw();
   }
 
   // methode pour s'assurer que le cylindre se situe sur le plateau

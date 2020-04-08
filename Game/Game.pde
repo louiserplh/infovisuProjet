@@ -9,7 +9,9 @@
  
   
   PShape evil;
-  PGraphics gameSurface ; 
+  PGraphics gameSurface; 
+  PGraphics background;
+  PGraphics topView;
   
   Ball maBoule;
   Plateau monPlato; 
@@ -33,8 +35,10 @@
   void setup() { 
     textSize(32);
     gameSurface = createGraphics(width, height-300, P3D); 
-    monPlato = new Plateau(gameSurface);
-    maBoule = new Ball(monPlato, gameSurface);
+    background = createGraphics(width,300,P3D);
+    topView = createGraphics(300,300,P2D);
+    monPlato = new Plateau();
+    maBoule = new Ball(monPlato);
     PImage img = loadImage("robotnik.png");
     evil = loadShape("robotnik.obj");
     evil.setTexture(img);
@@ -43,6 +47,8 @@
   void draw() {
     drawGame();
     image(gameSurface, 0, 0);
+    image(background,0,0);
+    image(topView,0,0);
   }
   
   void drawGame(){
@@ -51,7 +57,7 @@
       gameSurface.background(255);
    
      // dessin plateau
-      monPlato.display(appuierSurShift());
+      monPlato.display(appuierSurShift(), gameSurface);
      
      if(wasInitialised) {
        if(timeReset){
@@ -69,16 +75,23 @@
      
        // dessin des cylindres
        for (int i = 0 ; i < cylindres.mesCylindres.size(); ++i) {
-           cylindres.run();
-         }
+           cylindres.run(gameSurface);
+       }
      }
     
      // dessin sphere
      maBoule.update(monPlato);
      maBoule.checkEdges(monPlato);  
-     maBoule.display(appuierSurShift());
-    
-    gameSurface.endDraw();
+     maBoule.display(appuierSurShift(),gameSurface);
+     gameSurface.endDraw();
+     
+     background.beginDraw();
+     background.fill(100);
+     background.endDraw();
+     
+     topView.beginDraw();
+     topView.fill(50);
+     topView.endDraw();
   }
   
   

@@ -14,34 +14,31 @@ class Plateau {
   float rotationZ ; // rotation de l'angle Z
   final float size = 400 ; // taille d'un cote du plateau [car c'est un carree] 
   final float thicc = 20 ; // epaisseur du plateau
-  
-  PGraphics pg;
 
   // constructeur du plateau
-  Plateau(PGraphics pg){
+  Plateau(){
     rotationX = 0 ;
     rotationZ = 0 ;
-    this.pg = pg;
   }
   
   // methode pour afficher le plateau
-  void display(boolean appuierSurShift){
+  void display(boolean appuierSurShift,PGraphics pg){
     pg.beginDraw();
-     pg.stroke(0);
-     pg.fill(200);
-     pg.lights(); 
+    pg.stroke(0);
+    pg.fill(200);
+    pg.lights(); 
      
-     pg.translate(width/2, height/2, 0);
+    pg.translate(width/2, height/2, 0);
      
-     if (appuierSurShift){
-       pg.rotateX(-PI/2.0);
-     }
-     else {
-       pg.rotateX(rotationX);
-       pg.rotateZ(rotationZ);
-     }
-     pg.box(size, thicc, size); 
-     pg.endDraw();
+    if (appuierSurShift){
+      pg.rotateX(-PI/2.0);
+    }
+    else {
+      pg.rotateX(rotationX);
+      pg.rotateZ(rotationZ);
+    }
+    pg.box(size, thicc, size); 
+    pg.endDraw();
   }
   
    boolean surLePlateau(PVector origin){
