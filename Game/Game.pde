@@ -19,6 +19,7 @@
   
   float timeStart ; 
   float timeElapsed ; 
+  int topViewSize = 300 ;
   
   float rapidity = 0.02;
   
@@ -34,9 +35,9 @@
   // initialisation des elements de jeu
   void setup() { 
     textSize(32);
-    gameSurface = createGraphics(width, height-300, P3D); 
-    background = createGraphics(width,300,P3D);
-    topView = createGraphics(300,300,P2D);
+    gameSurface = createGraphics(width, height-topViewSize, P3D); 
+    background = createGraphics(width,topViewSize,P3D);
+    topView = createGraphics(topViewSize,topViewSize,P2D);
     monPlato = new Plateau();
     maBoule = new Ball(monPlato);
     PImage img = loadImage("robotnik.png");
@@ -47,8 +48,9 @@
   void draw() {
     drawGame();
     image(gameSurface, 0, 0);
-    image(background,0,height-300);
-    image(topView,0,height-300);
+    //image(background,0,height-topViewSize);
+    topView();
+    image(topView,0,height-topViewSize);
   }
   
   void drawGame(){
@@ -85,15 +87,26 @@
      maBoule.display(appuierSurShift(),gameSurface);
      gameSurface.endDraw();
      
-     background.beginDraw();
-     background.background(100);
-     background.endDraw();
+     //background.beginDraw();
+     //background.background(100);
+     //background.endDraw();
      
-     topView.beginDraw();
-     topView.background(50);
-     topView.endDraw();
+     //topView.beginDraw();
+     //topView.background(0, 150, 255);
+     //topView.endDraw();
   }
   
+  void topView(){
+    float ratio = topViewSize / monPlato.size ; 
+     topView.beginDraw();
+     topView.background(0, 200, 255); 
+     topView.fill(150, 150, 255);
+     topView.stroke(10);
+     topView.circle(maBoule.location.x - width/2, maBoule.location.z + height/2, maBoule.diametreSphere * ratio );
+     
+     topView.endDraw();
+    
+  }
   
     // detetcte si on appuye sur la touche Shift
     boolean appuierSurShift(){
