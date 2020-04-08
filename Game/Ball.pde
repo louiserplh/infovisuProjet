@@ -55,28 +55,28 @@ class Ball {
   
   // methode pour afficher la sphere
   void display(boolean appuierSurShift,PGraphics pg){
-    pg.beginDraw();
+    //pg.beginDraw();
     pg.pushMatrix();
-     pg.noStroke(); 
-     pg.fill(255); 
-     PImage beachball = loadImage("BeachBall.png");
-     float angle = atan2(location.z, -location.x);
-     
-     if (appuierSurShift){
-       pg.translate(location.x, -(diametreSphere + monPlato.thicc), location.z);
-       sphere = pg.createShape(SPHERE, diametreSphere); 
-       sphere.setTexture(beachball);
-       pg.shape(sphere);
-     }
-     else {
-       pg.translate(location.x + width/2, location.y + height/2, location.z);
-       sphere = pg.createShape(SPHERE, diametreSphere); 
-       sphere.setTexture(beachball);
-       pg.rotate(angle*PI);
-       pg.shape(sphere);
-     }
+    pg.noStroke(); 
+    pg.fill(255); 
+    PImage beachball = loadImage("BeachBall.png");
+    float angle = atan2(location.z, -location.x);
+ 
+    if (appuierSurShift){
+      pg.translate(location.x, -(diametreSphere + monPlato.thicc), location.z);
+      sphere = pg.createShape(SPHERE, diametreSphere); 
+      sphere.setTexture(beachball);
+      pg.shape(sphere);
+    }
+    else {
+      pg.translate(location.x, location.y, location.z);
+      sphere = pg.createShape(SPHERE, diametreSphere); 
+      sphere.setTexture(beachball);
+      pg.rotate(angle*PI);
+      pg.shape(sphere);
+    }
     pg.popMatrix();
-    pg.endDraw();
+    //pg.endDraw();
   }
   
   // methode pour eviter que la sphere sorte hors du plateau  
