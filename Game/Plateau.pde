@@ -23,7 +23,6 @@ class Plateau {
   
   // methode pour afficher le plateau
   void display(boolean appuierSurShift,PGraphics pg){
-    //pg.beginDraw();
     pg.stroke(0);
     pg.fill(200);
     pg.lights(); 
@@ -38,7 +37,6 @@ class Plateau {
       pg.rotateZ(rotationZ);
     }
     pg.box(size, thicc, size); 
-    //pg.endDraw();
   }
   
    boolean surLePlateau(PVector origin){

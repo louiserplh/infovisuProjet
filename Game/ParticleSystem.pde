@@ -57,7 +57,6 @@ class ParticleSystem {
  
   // methode pour mettre faire tourner le systeme de gestion des particules 
   void run(PGraphics pg){
-    //pg.beginDraw();
     if(mesCylindres.size() > 0) {
     
       mesCylindres.get(0).display(pg);
@@ -84,6 +83,5 @@ class ParticleSystem {
         }
       }
      }
-     //pg.endDraw();
   }
 }

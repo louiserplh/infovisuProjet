@@ -55,7 +55,7 @@ class Ball {
   
   // methode pour afficher la sphere
   void display(boolean appuierSurShift,PGraphics pg){
-    //pg.beginDraw();
+    
     pg.pushMatrix();
     pg.noStroke(); 
     pg.fill(255); 
@@ -76,7 +76,6 @@ class Ball {
       pg.shape(sphere);
     }
     pg.popMatrix();
-    //pg.endDraw();
   }
   
   // methode pour eviter que la sphere sorte hors du plateau  

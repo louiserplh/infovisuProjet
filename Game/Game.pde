@@ -47,8 +47,8 @@
   void draw() {
     drawGame();
     image(gameSurface, 0, 0);
-    image(background,0,0);
-    image(topView,0,0);
+    image(background,0,height-300);
+    image(topView,0,height-300);
   }
   
   void drawGame(){
@@ -86,11 +86,11 @@
      gameSurface.endDraw();
      
      background.beginDraw();
-     background.fill(100);
+     background.background(100);
      background.endDraw();
      
      topView.beginDraw();
-     topView.fill(50);
+     topView.background(50);
      topView.endDraw();
   }
   
