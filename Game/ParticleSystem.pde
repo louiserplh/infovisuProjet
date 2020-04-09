@@ -29,7 +29,7 @@ class ParticleSystem {
   }
   
   // methode pour ajouter des particules
-  void addParticle(boolean appuierSurShift) {
+  boolean addParticle(boolean appuierSurShift) {
     
     if(mesCylindres.size() > 0) {
       if(!appuierSurShift) {
@@ -48,15 +48,17 @@ class ParticleSystem {
           Cylindre cyl = new Cylindre(center.x, origin.y, center.z);
           if(cyl.surLePlateau(plateau) && !cyl.chevauchement(mesCylindres, ball)){
             mesCylindres.add(cyl);
-            i = numAttempts; 
+            i = numAttempts;
+            return true ;
           } 
         }
       }
     }
+   return false; 
  }
  
   // methode pour mettre faire tourner le systeme de gestion des particules 
-  void run(PGraphics pg){
+  boolean run(PGraphics pg){
     if(mesCylindres.size() > 0) {
     
       mesCylindres.get(0).display(pg);
@@ -74,14 +76,17 @@ class ParticleSystem {
       
       if(ball.collisionCylindre(mesCylindres.get(0))){
         mesCylindres.clear();
+        return true;
       }
       
       for(int i=1; i<mesCylindres.size();++i){
         mesCylindres.get(i).display(pg);
         if(ball.collisionCylindre(mesCylindres.get(i))){
             mesCylindres.remove(i);
+            return true;
         }
       }
      }
+     return false;
   }
 }

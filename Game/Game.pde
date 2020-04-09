@@ -12,6 +12,7 @@
   PGraphics gameSurface; 
  // PGraphics background;
   PGraphics topView;
+  PGraphics scoreBoard;
   
   Ball maBoule;
   Plateau monPlato; 
@@ -19,12 +20,17 @@
   
   float timeStart ; 
   float timeElapsed ; 
-  int topViewSize = 300 ;
-  
   float rapidity = 0.02;
+  
+  int topViewSize = 300 ;
+  int frameSize = 20 ; 
+  int lastScore = 0 ; 
+  int totalScore = 0 ; 
   
   boolean timeReset = true ;
   boolean wasInitialised = false;
+  boolean ajoutCylindre ; 
+  boolean removeCylindre ;
   
   // taille de la fenetre
   void settings() {
@@ -38,6 +44,7 @@
     gameSurface = createGraphics(width, height-topViewSize, P3D); 
     //background = createGraphics(width,topViewSize,P3D);
     topView = createGraphics(topViewSize,topViewSize,P2D);
+    scoreBoard = createGraphics(topViewSize - frameSize, topViewSize - frameSize, P2D);
     monPlato = new Plateau();
     maBoule = new Ball(monPlato);
     PImage img = loadImage("robotnik.png");
@@ -51,6 +58,8 @@
     //image(background,0,height-topViewSize);
     topView();
     image(topView,0,height-topViewSize);
+    scoreBoard();
+    image(scoreBoard, topViewSize + frameSize/2, height-topViewSize + frameSize/2); 
   }
   
   void drawGame(){
@@ -71,12 +80,12 @@
      
        //ajout de cylindres toutes les demies secondes
        if(timeElapsed >= 0.5) {
-          cylindres.addParticle(appuierSurShift());
+          ajoutCylindre = cylindres.addParticle(appuierSurShift());
           timeReset = true ; 
         }
      
        // dessin des cylindres
-       cylindres.run(gameSurface);
+       removeCylindre = cylindres.run(gameSurface);
     }
     
      // dessin sphere
@@ -113,6 +122,19 @@
        }
      }
     topView.endDraw(); 
+  }
+  
+  void scoreBoard(){
+    scoreBoard.beginDraw();
+    scoreBoard.background(225);
+    /* if(ajoutCylindre & timeReset){
+      lastScore = -5 ;
+    }else if(removeCylindre){
+      lastScore = int(10 * abs(maBoule.velocity.x) + 10 * abs(maBoule.velocity.z)) / 2 ; 
+    }
+    totalScore += lastScore ; 
+    println(totalScore); */
+    scoreBoard.endDraw();
   }
   
     // detetcte si on appuye sur la touche Shift
