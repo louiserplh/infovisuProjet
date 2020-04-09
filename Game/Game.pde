@@ -76,10 +76,10 @@
         }
      
        // dessin des cylindres
-       for (int i = 0 ; i < cylindres.mesCylindres.size(); ++i) {
-           cylindres.run(gameSurface);
-       }
-     }
+       //for (int i = 0 ; i < cylindres.mesCylindres.size(); ++i) {
+         cylindres.run(gameSurface);
+       //}
+    }
     
      // dessin sphere
      maBoule.update(monPlato);
@@ -100,12 +100,25 @@
     float ratio = topViewSize / monPlato.size ; 
      topView.beginDraw();
      topView.background(0, 200, 255); 
-     topView.fill(150, 150, 255);
+     topView.fill(255, 150, 0);
      topView.stroke(10);
-     topView.circle(maBoule.location.x - width/2, maBoule.location.z + height/2, maBoule.diametreSphere * ratio );
-     
-     topView.endDraw();
-    
+     topView.circle(topViewSize/2 + (maBoule.location.x*ratio), topViewSize/2 + (maBoule.location.z*ratio), maBoule.diametreSphere);
+     /* if(wasInitialised){
+       for (int i = 0 ; i < cylindres.mesCylindres.size(); ++i) {
+         Cylindre cyl = cylindres.mesCylindres.get(i);
+        if(i == 0) {
+           topView.fill(255, 0, 0);
+           topView.stroke(255,200, 0);
+           topView.circle(topViewSize/2 + (cyl.position.x*ratio), topViewSize/2 + (cyl.position.z*ratio), cyl.rayonCyl*2);
+           
+         }else{ 
+           topView.fill(255);
+           topView.noStroke();
+           topView.circle(topViewSize/2 + (cyl.position.x*ratio), topViewSize/2 + (cyl.position.z*ratio), cyl.rayonCyl*2);
+         }
+       } */
+       
+    topView.endDraw(); 
   }
   
     // detetcte si on appuye sur la touche Shift

@@ -80,7 +80,7 @@ class Cylindre {
     pg.translate(position.x, position.y, position.z);
     pg.shape(cylinEntier);
     pg.popMatrix(); 
-  }
+    }
 
   // methode pour s'assurer que le cylindre se situe sur le plateau
   boolean surLePlateau(Plateau plateau){
