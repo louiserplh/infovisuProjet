@@ -10,7 +10,7 @@
   
   PShape evil;
   PGraphics gameSurface; 
-  PGraphics background;
+ // PGraphics background;
   PGraphics topView;
   
   Ball maBoule;
@@ -36,7 +36,7 @@
   void setup() { 
     textSize(32);
     gameSurface = createGraphics(width, height-topViewSize, P3D); 
-    background = createGraphics(width,topViewSize,P3D);
+    //background = createGraphics(width,topViewSize,P3D);
     topView = createGraphics(topViewSize,topViewSize,P2D);
     monPlato = new Plateau();
     maBoule = new Ball(monPlato);
@@ -76,9 +76,7 @@
         }
      
        // dessin des cylindres
-       //for (int i = 0 ; i < cylindres.mesCylindres.size(); ++i) {
-         cylindres.run(gameSurface);
-       //}
+       cylindres.run(gameSurface);
     }
     
      // dessin sphere
@@ -90,10 +88,6 @@
      //background.beginDraw();
      //background.background(100);
      //background.endDraw();
-     
-     //topView.beginDraw();
-     //topView.background(0, 150, 255);
-     //topView.endDraw();
   }
   
   void topView(){
@@ -103,21 +97,21 @@
      topView.fill(255, 150, 0);
      topView.stroke(10);
      topView.circle(topViewSize/2 + (maBoule.location.x*ratio), topViewSize/2 + (maBoule.location.z*ratio), maBoule.diametreSphere);
-     /* if(wasInitialised){
+     if(wasInitialised){
        for (int i = 0 ; i < cylindres.mesCylindres.size(); ++i) {
          Cylindre cyl = cylindres.mesCylindres.get(i);
         if(i == 0) {
            topView.fill(255, 0, 0);
            topView.stroke(255,200, 0);
-           topView.circle(topViewSize/2 + (cyl.position.x*ratio), topViewSize/2 + (cyl.position.z*ratio), cyl.rayonCyl*2);
+           topView.circle(topViewSize/2 + (cyl.position.x*ratio), topViewSize/2 + (cyl.position.z*ratio), cyl.rayonCyl*2*ratio);
            
          }else{ 
            topView.fill(255);
            topView.noStroke();
-           topView.circle(topViewSize/2 + (cyl.position.x*ratio), topViewSize/2 + (cyl.position.z*ratio), cyl.rayonCyl*2);
+           topView.circle(topViewSize/2 + (cyl.position.x*ratio), topViewSize/2 + (cyl.position.z*ratio), cyl.rayonCyl*2*ratio);
          }
-       } */
-       
+       }
+     }
     topView.endDraw(); 
   }
   
