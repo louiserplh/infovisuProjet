@@ -26,8 +26,8 @@ class Cylindre {
   
  
   // constructeur du cylindre
-  Cylindre(float xBase, float yBase, float zBase) {
-    stroke(255,0 ,0) ; 
+  Cylindre(float xBase, float yBase, float zBase, PVector accentColor) {
+    stroke(accentColor.x, accentColor.y, accentColor.z) ; 
     fill(255) ;
     lights() ; 
     position = new PVector(xBase, yBase, zBase);

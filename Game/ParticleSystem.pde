@@ -18,10 +18,10 @@ class ParticleSystem {
   PShape evil;    // Forme pour le mechant du jeu
   
   // constructeur dy systeme de particules
-  ParticleSystem(PVector origin, Plateau plateau, Ball ball, PShape evil) {
+  ParticleSystem(PVector origin, Plateau plateau, Ball ball, PShape evil, PVector couleur) {
     this.origin = origin.copy();
     mesCylindres = new ArrayList<Cylindre>();
-    mesCylindres.add(new Cylindre(origin.x, origin.y, origin.z));
+    mesCylindres.add(new Cylindre(origin.x, origin.y, origin.z, couleur));
     this.plateau = plateau;
     this.ball = ball;
     this.rayonCyl = mesCylindres.get(0).rayonCyl;
@@ -29,7 +29,7 @@ class ParticleSystem {
   }
   
   // methode pour ajouter des particules
-  boolean addParticle(boolean appuierSurShift) {
+  boolean addParticle(boolean appuierSurShift, PVector accentColor) {
     
     if(mesCylindres.size() > 0) {
       if(!appuierSurShift) {
@@ -45,7 +45,7 @@ class ParticleSystem {
           center.x += sin(angle) * 2*rayonCyl; 
           center.z += cos(angle) * 2*rayonCyl; 
           
-          Cylindre cyl = new Cylindre(center.x, origin.y, center.z);
+          Cylindre cyl = new Cylindre(center.x, origin.y, center.z, accentColor);
           if(cyl.surLePlateau(plateau) && !cyl.chevauchement(mesCylindres, ball)){
             mesCylindres.add(cyl);
             i = numAttempts;

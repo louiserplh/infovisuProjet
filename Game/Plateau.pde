@@ -22,9 +22,9 @@ class Plateau {
   }
   
   // methode pour afficher le plateau
-  void display(boolean appuierSurShift,PGraphics pg){
+  void display(boolean appuierSurShift,PGraphics pg, PVector accentColor){
     pg.stroke(0);
-    pg.fill(200);
+    pg.fill(accentColor.x, accentColor.y, accentColor.z);
     pg.lights(); 
      
     pg.translate(width/2, height/2, 0);
