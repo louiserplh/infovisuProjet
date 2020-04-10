@@ -26,6 +26,7 @@ class ParticleSystem {
     this.ball = ball;
     this.rayonCyl = mesCylindres.get(0).rayonCyl;
     this.evil = evil;
+    partieFinie = false ;
   }
   
   // methode pour ajouter des particules
@@ -76,6 +77,7 @@ class ParticleSystem {
       
       if(ball.collisionCylindre(mesCylindres.get(0))){
         mesCylindres.clear();
+        partieFinie = true ;
         return true;
       }
       

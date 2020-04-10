@@ -15,11 +15,17 @@ class PGraphiques {
   PGraphics topView;
   PGraphics scoreBoard;
   PGraphics barChart; 
+  PGraphics victory;
   
-  final PVector color1 = new PVector(254, 235, 201) ;  //peche pastel 
-  final PVector color2 = new PVector(253, 215, 175) ;  //peche moyen
-  final PVector color3 = new PVector(252, 169, 133) ;  //peche petant
-  final PVector accentColor = new PVector(150, 140, 200) ; //violet
+  boolean timeReset2 = true ;
+  
+  float timeStart2 ; 
+  float timeElapsed2 ; 
+  
+  final PVector color1 = new PVector(245, 237, 208) ;  //brun pastel 
+  final PVector color2 = new PVector(255, 247, 218) ;  //brun pastel + clair
+  final PVector color3 = new PVector(192, 186, 152) ;  //brun petant
+  final PVector accentColor = new PVector(112, 182, 73) ; //vert
   
   
   PGraphiques(){
@@ -28,6 +34,7 @@ class PGraphiques {
     topView = createGraphics(topViewSize  - frameSize, topViewSize  - frameSize,P2D);
     scoreBoard = createGraphics(topViewSize - frameSize, topViewSize - frameSize, P2D);
     barChart = createGraphics(width - 2*topViewSize - frameSize , topViewSize - frameSize, P2D); 
+    victory = createGraphics(width , height, P2D);
   }
   
   //methode pour l'affichage de la plage graphique pour le jeu
@@ -126,15 +133,71 @@ class PGraphiques {
   
   //methode pour l'affichage de la plage graphique du graphique en batons
   void barChart(){
+    int elapsedSeconds = 0 ;
+    int positionY = 0 ; 
+    
     barChart.beginDraw();
     barChart.fill(color2.x, color2.y, color2.z);
     barChart.stroke(accentColor.x, accentColor.y, accentColor.z);
     barChart.strokeWeight(8);
     barChart.rect(0, 0, width - 2*topViewSize - frameSize, topViewSize - frameSize);
-  
-    barChart.endDraw();
+    barChart.stroke(color3.x, color3.y, color3.z);
+    barChart.strokeWeight(3);
+    barChart.line(4, topViewSize / 3, width - 2*topViewSize - frameSize - 4, topViewSize / 3);
     
+    barChart.fill(accentColor.x, accentColor.y, accentColor.z) ;
+    barChart.stroke(color2.x, color2.y, color2.z);
+    barChart.strokeWeight(1);
+    barChart.rect(4 + elapsedSeconds,        //origine x du rectangle
+                  topViewSize/3 + positionY*5,   //origine y du rectangle
+                  10,                  
+                  5);                
+   
+    
+    if(wasInitialised){
+      if(!partieFinie){
+        if(timeReset2){
+           timeStart2 = frameCount / frameRate;
+           timeReset2 = false ;
+         }
+         timeElapsed2 = frameCount / frameRate - timeStart2 ;
+         
+         //ajout d'un baton au barChart toutes les secondes
+         if(timeElapsed2 >= 1) {
+           positionY = 0 ;
+           if(totalScore < 0 ){
+             for(int i = 0 ; i > totalScore ; --i){
+               positionY += 1 ;
+             }
+           }else if(totalScore > 0 ){      
+             positionY -= 1 ; 
+           }else {
+           }
+           elapsedSeconds += 10 ; 
+           timeReset2 = true ; 
+          }
+      }
+    }
+    barChart.endDraw();
   }
   
   
+  /*void victory(){
+    
+    if(partieFinie){
+      victory.beginDraw();
+      victory.background(0);
+      victory.textSize(50); 
+      victory.fill(color1.x, color1.y, color1.z); 
+      victory.text("You won !", 850, 100);
+      victory.textSize(25);
+      victory.text("[press control to continue playing]", 750, 150); 
+      if(appuierSurCtrl()){
+        partieFinie = false ; 
+      }
+      victory.endDraw(); 
+    }    
+  }*/
+
+
 }

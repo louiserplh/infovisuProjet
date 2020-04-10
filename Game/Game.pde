@@ -28,6 +28,7 @@
   boolean wasInitialised = false;
   boolean ajoutCylindre ; 
   boolean removeCylindre ;
+  boolean partieFinie ; 
   
   // taille de la fenetre
   void settings() {
@@ -56,12 +57,20 @@
     image(affichage.scoreBoard, topViewSize + frameSize/2, height-topViewSize + frameSize/2); 
     affichage.barChart();
     image(affichage.barChart, 2*topViewSize + frameSize/2 , height-topViewSize + frameSize/2); 
+    affichage.victory(); 
+    image(affichage.victory, 0, 0); 
   }
   
   
-    // detetcte si on appuye sur la touche Shift
+    // detecte si on appuye sur la touche Shift
     boolean appuierSurShift(){
       return (keyPressed == true && keyCode == SHIFT); 
+    }
+    
+    //detecte si on appuye sur la touche Enter
+    boolean appuierSurCtrl(){
+      println("ctrl"); 
+      return (keyPressed == true && keyCode == CONTROL);
     }
   
     // rotation du plateau en fonction des axes
