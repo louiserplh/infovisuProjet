@@ -102,7 +102,7 @@
   void topView(){
     float ratio = topViewSize / monPlato.size ; 
      topView.beginDraw();
-     topView.background(0, 200, 255); 
+     topView.background(0, 105, 150); 
      topView.fill(255, 150, 0);
      topView.stroke(10);
      topView.circle(topViewSize/2 + (maBoule.location.x*ratio), topViewSize/2 + (maBoule.location.z*ratio), maBoule.diametreSphere);
@@ -126,14 +126,24 @@
   
   void scoreBoard(){
     scoreBoard.beginDraw();
-    scoreBoard.background(225);
-    /* if(ajoutCylindre & timeReset){
-      lastScore = -5 ;
+    scoreBoard.background(235);
+    
+    if(ajoutCylindre & timeReset){
+      lastScore = -10 ;
+      totalScore += lastScore ;
     }else if(removeCylindre){
-      lastScore = int(10 * abs(maBoule.velocity.x) + 10 * abs(maBoule.velocity.z)) / 2 ; 
+      lastScore = int(5*maBoule.velocity.mag());
+      totalScore += lastScore ;
     }
-    totalScore += lastScore ; 
-    println(totalScore); */
+    scoreBoard.textSize(17.5);
+    scoreBoard.fill(50);
+    scoreBoard.text("Total Score :" , frameSize/2, topViewSize/9 );
+    scoreBoard.text(totalScore , frameSize/2, 2*topViewSize/9 );
+    scoreBoard.text("Velocity : " , frameSize/2, 4*topViewSize/9 );
+    scoreBoard.text(maBoule.velocity.mag(), frameSize/2, 5*topViewSize/9 );
+    scoreBoard.text("Last Score " , frameSize/2 , 7*topViewSize/9 );
+    scoreBoard.text(lastScore , frameSize/2 , 8*topViewSize/9 );
+   
     scoreBoard.endDraw();
   }
   
