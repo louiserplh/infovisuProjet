@@ -1,5 +1,5 @@
 /*
-  *  PGraphics.pde  
+  *  PGraphiques.pde  
   *  Classe pour gerer les affichages graphiques dans le jeu
   *  Groupe Q : 
   *     BIANCHI Elisa 300928     ;
