@@ -16,6 +16,8 @@ class PGraphiques {
   PGraphics scoreBoard;
   PGraphics barChart; 
   PGraphics victory;
+  ArrayList<Rectangles> rectanglesBarChart ; 
+
   
   boolean timeReset2 = true ;
   
@@ -29,6 +31,8 @@ class PGraphiques {
   
   
   PGraphiques(){
+    ArrayList<Rectangles> rectanglesBarChart = new ArrayList<Rectangles>();
+    rectanglesBarChart.add(new Rectangles(0, 0, 0, 0, 0)) ;
     gameSurface = createGraphics(width, height-topViewSize, P3D); 
     myBackground = createGraphics(width,topViewSize,P3D);
     topView = createGraphics(topViewSize  - frameSize, topViewSize  - frameSize,P2D);
@@ -134,7 +138,11 @@ class PGraphiques {
   //methode pour l'affichage de la plage graphique du graphique en batons
   void barChart(){
     int elapsedSeconds = 0 ;
-    int positionY = 0 ; 
+    int origineY ; 
+    int dimX = 10 ; 
+    int dimY = 5 ;
+    int fade = 5; 
+    Rectangles rect ;
     
     barChart.beginDraw();
     barChart.fill(color2.x, color2.y, color2.z);
@@ -145,44 +153,50 @@ class PGraphiques {
     barChart.strokeWeight(3);
     barChart.line(4, topViewSize / 3, width - 2*topViewSize - frameSize - 4, topViewSize / 3);
     
-    barChart.fill(accentColor.x, accentColor.y, accentColor.z) ;
-    barChart.stroke(color2.x, color2.y, color2.z);
-    barChart.strokeWeight(1);
-    barChart.rect(4 + elapsedSeconds,        //origine x du rectangle
-                  topViewSize/3 + positionY*5,   //origine y du rectangle
-                  10,                  
-                  5);                
-   
-    
-    if(wasInitialised){
-      if(!partieFinie){
+    //ajout d'un baton au barChart toutes les secondes
+    if(wasInitialised && !partieFinie){
         if(timeReset2){
            timeStart2 = frameCount / frameRate;
            timeReset2 = false ;
          }
+         
          timeElapsed2 = frameCount / frameRate - timeStart2 ;
          
-         //ajout d'un baton au barChart toutes les secondes
          if(timeElapsed2 >= 1) {
-           positionY = 0 ;
+           origineY = 0 ; 
            if(totalScore < 0 ){
              for(int i = 0 ; i > totalScore ; --i){
-               positionY += 1 ;
+               rect = new Rectangles(4 + elapsedSeconds * dimX, topViewSize/3 + origineY * dimY, dimX, dimY, fade * origineY ) ;
+               rectanglesBarChart.add(rect);
+               origineY += 1 ; 
              }
-           }else if(totalScore > 0 ){      
-             positionY -= 1 ; 
-           }else {
+           }else if(totalScore > 0 ){ 
+             for(int i = 0 ; i > totalScore ; ++i){
+               rect = new Rectangles(4 + elapsedSeconds * dimX, topViewSize/3 + origineY * dimY, dimX, dimY, fade * origineY ) ;
+               rectanglesBarChart.add(rect);
+               origineY -= 1 ; 
+             }
            }
-           elapsedSeconds += 10 ; 
-           timeReset2 = true ; 
-          }
-      }
+           
+           elapsedSeconds += 1 ; 
+           timeReset2 = true ;
+         }
+    /*for(int i=0; i < rectanglesBarChart.size(); ++i){
+       rectanglesBarChart.get(i).display(barChart, accentColor, color2);
+    }*/
     }
+    
+   
+    
+    if(partieFinie){
+      barChart.clear();
+    }
+    
     barChart.endDraw();
   }
   
   
-  /*void victory(){
+  void victory(){
     
     if(partieFinie){
       victory.beginDraw();
@@ -194,10 +208,46 @@ class PGraphiques {
       victory.text("[press control to continue playing]", 750, 150); 
       if(appuierSurCtrl()){
         partieFinie = false ; 
+        victory.clear();
       }
+      
+      // il reste a faire l'animation
+   
       victory.endDraw(); 
     }    
-  }*/
+  }
 
 
+}
+
+
+
+
+class Rectangles{
+  PVector origine ; 
+  PVector dimension ;  
+  int  myFade ; 
+  
+  Rectangles(float x, float y, float dimX, float dimY, int fade){
+    myFade = fade ; 
+    dimension = new PVector(dimX, dimY);
+    origine = new PVector(x, y);
+  }
+    
+  void display(PGraphics barChart, PVector colorShade, PVector color2){
+    barChart.pushMatrix(); 
+    
+    if(colorShade.z - myFade <= 255 && colorShade.z - myFade >= 0 ){
+      fill(colorShade.x, colorShade.y, colorShade.z - myFade) ; 
+    }else if(colorShade.z - myFade > 255){
+      fill(colorShade.x, colorShade.y, 255) ; 
+    }else if(colorShade.z - myFade < 0){
+        fill(colorShade.x, colorShade.y, 0) ; 
+    }
+    stroke(color2.x, color2.y, color2.z);
+    strokeWeight(1);
+    
+    barChart.rect(origine.x, origine.y, dimension.x, dimension.y); 
+    barChart.popMatrix();
+  } 
 }

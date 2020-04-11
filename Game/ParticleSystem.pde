@@ -58,7 +58,7 @@ class ParticleSystem {
    return false; 
  }
  
-  // methode pour mettre faire tourner le systeme de gestion des particules 
+  // methode pour faire tourner le systeme de gestion des particules 
   boolean run(PGraphics pg){
     if(mesCylindres.size() > 0) {
     
