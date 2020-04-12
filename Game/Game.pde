@@ -23,6 +23,7 @@
   int frameSize = 20 ; 
   int lastScore = 0 ; 
   int totalScore = 0 ; 
+  int scrollBarHeight = 30 ;
   
   boolean timeReset = true ;
   boolean wasInitialised = false;
@@ -57,8 +58,10 @@
     image(affichage.scoreBoard, topViewSize + frameSize/2, height-topViewSize + frameSize/2); 
     affichage.barChart();
     image(affichage.barChart, 2*topViewSize + frameSize/2 , height-topViewSize + frameSize/2); 
-    affichage.victory(); 
-    image(affichage.victory, 0, 0); 
+    affichage.scrollBar();
+    image(affichage.scrollBar, 2*topViewSize + frameSize/2, height - scrollBarHeight - frameSize / 2);
+    //affichage.victory(); 
+    //image(affichage.victory, 0, 0); 
   }
   
   
@@ -69,22 +72,21 @@
     
     //detecte si on appuye sur la touche Enter
     boolean appuierSurCtrl(){
-      println("ctrl"); 
       return (keyPressed == true && keyCode == CONTROL);
     }
   
     // rotation du plateau en fonction des axes
     void mouseDragged() { 
-      if(pmouseX < mouseX && monPlato.rotationZ < PI/3) {
+      if(pmouseX < mouseX && monPlato.rotationZ < (PI/3) && mouseY < height-topViewSize) {
         monPlato.rotationZ = monPlato.rotationZ + rapidity; 
       }
-      else if(pmouseX > mouseX && monPlato.rotationZ > -PI/3) {
+      else if(pmouseX > mouseX && monPlato.rotationZ > (-PI/3) && mouseY < height-topViewSize) {
         monPlato.rotationZ = monPlato.rotationZ - rapidity; 
       }
-      if(pmouseY < mouseY && monPlato.rotationX > (-PI/3)) {
+      if(pmouseY < mouseY && monPlato.rotationX > (-PI/3) && mouseY < height-topViewSize) {
         monPlato.rotationX = monPlato.rotationX - rapidity; 
       }
-      else if(pmouseY > mouseY && monPlato.rotationX < (PI/3)) {
+      else if(pmouseY > mouseY && monPlato.rotationX < (PI/3) && mouseY < height-topViewSize ) {
         monPlato.rotationX = monPlato.rotationX + rapidity; }
     }
     

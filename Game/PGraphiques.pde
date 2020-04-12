@@ -15,8 +15,17 @@ class PGraphiques {
   PGraphics topView;
   PGraphics scoreBoard;
   PGraphics barChart; 
+  PGraphics scrollBar; 
   PGraphics victory;
-  IntList rectanglesBarChart ; 
+  IntList rectanglesBarChart ;
+  
+  int strokeWeight = 6 ;
+  
+  float scrollBarWidth = width - 2*topViewSize - frameSize ;  //Bar's width in pixels
+  float sliderPosition, newSliderPosition;    //Position of slider
+  float sliderPositionMin = strokeWeight / 2 ;
+  float sliderPositionMax = scrollBarWidth - scrollBarHeight;
+  float currentSliderPosition ; 
 
   boolean timeReset2 = true ;
   
@@ -34,7 +43,9 @@ class PGraphiques {
     myBackground = createGraphics(width,topViewSize,P3D);
     topView = createGraphics(topViewSize  - frameSize, topViewSize  - frameSize,P2D);
     scoreBoard = createGraphics(topViewSize - frameSize, topViewSize - frameSize, P2D);
-    barChart = createGraphics(width - 2*topViewSize - frameSize , topViewSize - 30 - 3 * frameSize, P2D); 
+    barChart = createGraphics(width - 2*topViewSize - frameSize , topViewSize - scrollBarHeight - 2 * frameSize, P2D); 
+    scrollBar = createGraphics(width - 2*topViewSize - frameSize, scrollBarHeight, P2D);
+    sliderPosition = scrollBarWidth/2 - scrollBarHeight/2 ; 
     rectanglesBarChart = new IntList();
     rectanglesBarChart.append(0);
     victory = createGraphics(width , height, P2D);
@@ -86,7 +97,7 @@ class PGraphiques {
      topView.beginDraw();
      topView.background(accentColor.x, accentColor.y, accentColor.z); 
      topView.fill(color3.x, color3.y, color3.z);
-     topView.stroke(10);
+     topView.stroke(strokeWeight);
      topView.circle((topViewSize - frameSize)/2 + (maBoule.location.x*ratio), (topViewSize - frameSize)/2 + (maBoule.location.z*ratio), maBoule.diametreSphere*ratio);
      if(wasInitialised){
        for (int i = 0 ; i < cylindres.mesCylindres.size(); ++i) {
@@ -110,7 +121,7 @@ class PGraphiques {
     scoreBoard.beginDraw();
     scoreBoard.fill(color1.x, color1.y, color1.z);
     scoreBoard.stroke(accentColor.x, accentColor.y, accentColor.z);
-    scoreBoard.strokeWeight(8);
+    scoreBoard.strokeWeight(strokeWeight);
     scoreBoard.rect(0, 0, topViewSize - frameSize, topViewSize - frameSize);
     float velocity = round(10 * maBoule.velocity.mag()) / 10.0 ; 
     
@@ -137,17 +148,18 @@ class PGraphiques {
   //methode pour l'affichage de la plage graphique du graphique en batons
   void barChart(){
     int oneSquareInPoints = 5 ; 
-    int dimX = 10 ; 
+    int minDimX = 3 ; 
+    float dimX = minDimX + 20 * currentSliderPosition  ; 
     int dimY = 5 ;
     
     barChart.beginDraw();
     barChart.fill(color2.x, color2.y, color2.z);
     barChart.stroke(accentColor.x, accentColor.y, accentColor.z);
-    barChart.strokeWeight(8);
-    barChart.rect(0, 0, width - 2*topViewSize - frameSize, topViewSize - 30 - 3 * frameSize);
+    barChart.strokeWeight(strokeWeight);
+    barChart.rect(0, 0, width - 2*topViewSize - frameSize, topViewSize - scrollBarHeight - 2 * frameSize);
     barChart.stroke(color3.x, color3.y, color3.z);
     barChart.strokeWeight(3);
-    barChart.line(4, topViewSize / 3, width - 2*topViewSize - frameSize - 4, topViewSize / 3);
+    barChart.line(strokeWeight / 2, (topViewSize - scrollBarHeight - 2 * frameSize) / 2 , width - 2*topViewSize - frameSize - strokeWeight / 2, (topViewSize - scrollBarHeight - 2 * frameSize) / 2);
     
     //ajout d'un baton au barChart toutes les secondes
     if(wasInitialised && !partieFinie && !appuierSurShift()){
@@ -177,10 +189,10 @@ class PGraphiques {
               barChart.strokeWeight(1);
               if(rectanglesBarChart.get(i) < 0 ){
                 barChart.fill(accentColor.x, accentColor.y, accentColor.z - 10 * j) ;
-                barChart.rect(4 + i * dimX, topViewSize / 3 + j * dimY, dimX, dimY) ;
+                barChart.rect(strokeWeight/2 + i * dimX, (topViewSize - scrollBarHeight - 2 * frameSize) / 2 + j * dimY, dimX, dimY) ;
               }else {
                  barChart.fill(accentColor.x, accentColor.y, accentColor.z + 10 * j) ;
-                 barChart.rect(4 + i * dimX, topViewSize / 3 - j * dimY, dimX, dimY) ;
+                 barChart.rect(strokeWeight/2 + i * dimX, (topViewSize - scrollBarHeight - 2 * frameSize) / 2  - j * dimY, dimX, dimY) ;
               }
             }
          }    
@@ -188,7 +200,52 @@ class PGraphiques {
   }
   
   
-  void victory(){
+  void scrollBar(){
+    boolean mouseOver ; 
+    boolean locked = false ; 
+    
+    newSliderPosition = sliderPosition;
+    
+    
+    if (mouseX > 2*topViewSize + frameSize/2 && mouseX < 2*topViewSize + frameSize/2 + scrollBarWidth &&
+        mouseY > height - scrollBarHeight - frameSize / 2 && mouseY < height - frameSize / 2) {
+      mouseOver = true;
+    }else {
+      mouseOver = false;
+    }
+    if (mousePressed && mouseOver) {
+      locked = true;
+    }
+    if (!mousePressed) {
+      locked = false;
+    }
+    if (locked) {
+      newSliderPosition = min(max(mouseX - scrollBarWidth/2 + scrollBarHeight / 2, sliderPositionMin), sliderPositionMax); //the constraint method ; 
+    }
+    if (abs(newSliderPosition - sliderPosition) > 1) {
+      sliderPosition = newSliderPosition ;
+    }
+    
+    scrollBar.beginDraw();
+    scrollBar.stroke(accentColor.x, accentColor.y, accentColor.z);
+    scrollBar.strokeWeight(strokeWeight); 
+    scrollBar.fill(min(accentColor.x+35, 255), min(accentColor.y+35, 255), min(accentColor.z+35, 255));
+    scrollBar.rect(0, 0, scrollBarWidth, scrollBarHeight);
+    if (mouseOver || locked) {
+     scrollBar.fill(color3.x, color3.y, color3.z);
+    }
+    else {
+     scrollBar.fill(color1.x, color1.y, color1.z);
+    }
+    scrollBar.noStroke();
+    scrollBar.rect(sliderPosition, strokeWeight/2, scrollBarHeight, scrollBarHeight - strokeWeight);
+    scrollBar.endDraw();
+     
+    currentSliderPosition = (sliderPosition)/(scrollBarWidth - scrollBarHeight) ; 
+  }
+  
+
+  /*void victory(){
     
     if(partieFinie){
       victory.beginDraw();
@@ -207,6 +264,6 @@ class PGraphiques {
    
       victory.endDraw(); 
     }    
-  }
+  }*/
   
 }
