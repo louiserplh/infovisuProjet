@@ -17,7 +17,9 @@ class PGraphiques {
   PGraphics barChart; 
   PGraphics scrollBar; 
   PGraphics victory;
+  
   IntList rectanglesBarChart ;
+  ArrayList<PatricleSystemConfetti> confettiList ;
   
   int strokeWeight = 6 ;
   
@@ -47,7 +49,12 @@ class PGraphiques {
     scrollBar = createGraphics(width - 2*topViewSize - frameSize, scrollBarHeight, P2D);
     sliderPosition = scrollBarWidth/2 - scrollBarHeight/2 ; 
     rectanglesBarChart = new IntList();
+    confettiList = new  ArrayList<PatricleSystemConfetti>() ;
+    for(int i = 0 ; i < 150; ++i){
+      confettiList.add(new PatricleSystemConfetti());
+    }
     rectanglesBarChart.append(0);
+    
     victory = createGraphics(width , height, P2D);
   }
   
@@ -148,9 +155,10 @@ class PGraphiques {
   //methode pour l'affichage de la plage graphique du graphique en batons
   void barChart(){
     int oneSquareInPoints = 5 ; 
-    int minDimX = 3 ; 
-    float dimX = minDimX + 20 * currentSliderPosition  ; 
+    int minDimX = 5 ; 
+    float dimX = minDimX + 30 * currentSliderPosition  ; 
     int dimY = 5 ;
+    int lineStroke = 2 ; 
     
     barChart.beginDraw();
     barChart.fill(color2.x, color2.y, color2.z);
@@ -158,7 +166,7 @@ class PGraphiques {
     barChart.strokeWeight(strokeWeight);
     barChart.rect(0, 0, width - 2*topViewSize - frameSize, topViewSize - scrollBarHeight - 2 * frameSize);
     barChart.stroke(color3.x, color3.y, color3.z);
-    barChart.strokeWeight(3);
+    barChart.strokeWeight(lineStroke);
     barChart.line(strokeWeight / 2, (topViewSize - scrollBarHeight - 2 * frameSize) / 2 , width - 2*topViewSize - frameSize - strokeWeight / 2, (topViewSize - scrollBarHeight - 2 * frameSize) / 2);
     
     //ajout d'un baton au barChart toutes les secondes
@@ -191,11 +199,12 @@ class PGraphiques {
                 barChart.fill(accentColor.x, accentColor.y, accentColor.z - 10 * j) ;
                 barChart.rect(strokeWeight/2 + i * dimX, (topViewSize - scrollBarHeight - 2 * frameSize) / 2 + j * dimY, dimX, dimY) ;
               }else {
-                 barChart.fill(accentColor.x, accentColor.y, accentColor.z + 10 * j) ;
-                 barChart.rect(strokeWeight/2 + i * dimX, (topViewSize - scrollBarHeight - 2 * frameSize) / 2  - j * dimY, dimX, dimY) ;
+                barChart.fill(accentColor.x, accentColor.y, accentColor.z + 10 * j) ;
+                barChart.rect(strokeWeight/2 + i * dimX, -dimY/2.0 + (topViewSize - scrollBarHeight - 2 * frameSize) / 2  - j * dimY, dimX, dimY) ;
               }
             }
          }    
+         
     barChart.endDraw();
   }
   
@@ -232,38 +241,79 @@ class PGraphiques {
     scrollBar.fill(min(accentColor.x+35, 255), min(accentColor.y+35, 255), min(accentColor.z+35, 255));
     scrollBar.rect(0, 0, scrollBarWidth, scrollBarHeight);
     if (mouseOver || locked) {
-     scrollBar.fill(color3.x, color3.y, color3.z);
+     scrollBar.fill(accentColor.x, accentColor.y, accentColor.z);
     }
     else {
      scrollBar.fill(color1.x, color1.y, color1.z);
     }
     scrollBar.noStroke();
-    scrollBar.rect(sliderPosition, strokeWeight/2, scrollBarHeight, scrollBarHeight - strokeWeight);
+    scrollBar.rect(sliderPosition, strokeWeight/2, scrollBarHeight - strokeWeight, scrollBarHeight - strokeWeight);
     scrollBar.endDraw();
      
     currentSliderPosition = (sliderPosition)/(scrollBarWidth - scrollBarHeight) ; 
   }
   
 
-  /*void victory(){
+  void victory(){
     
+    victory.beginDraw();
     if(partieFinie){
-      victory.beginDraw();
       victory.background(0);
-      victory.textSize(50); 
-      victory.fill(color1.x, color1.y, color1.z); 
-      victory.text("You won !", 850, 100);
-      victory.textSize(25);
-      victory.text("[press control to continue playing]", 750, 150); 
-      if(appuierSurCtrl()){
-        partieFinie = false ; 
-        victory.clear();
+      victory.textSize(100); 
+      //victory.fill(color1.x, color1.y, color1.z); 
+      victory.fill(random(100, 255), random(100, 255), random(100, 255));
+      victory.text("YOU WON", 735, height/2 - 100);
+      victory.textSize(20);
+      victory.text("[press the control key to continue playing]", 775, height/2 - 50 ); 
+      
+      for (PatricleSystemConfetti psc: confettiList){
+        psc.run(victory) ;
       }
       
-      // il reste a faire l'animation
-   
-      victory.endDraw(); 
-    }    
-  }*/
+      if(appuierSurCtrl()){
+        wasInitialised = false ;
+        partieFinie = false ;
+        victory.clear(); 
+        confettiList.clear();
+        for(int i = 0 ; i < 150; ++i){
+          confettiList.add(new PatricleSystemConfetti());
+        }
+      } 
+    }
+    victory.endDraw();  
+  }
   
+}
+  
+  
+  class PatricleSystemConfetti {
+    int confettiSize = 25 ; 
+    PVector location ;
+    PVector velocity ; 
+    PVector acceleration ; 
+    float lifespan ; 
+    
+    PatricleSystemConfetti(){
+      location = new PVector(random(width/2 - 200, width/2 + 200) , height/3);
+      acceleration = new PVector(0, 0.1);
+      velocity = new PVector(random(-10, 10), random(-10, 10));
+      lifespan = 255.0 ; 
+    }
+      
+    void update(){
+      velocity.add(acceleration);
+      location.add(velocity); 
+      lifespan -= 1.0 ;
+    }
+    
+    void display(PGraphics victory){
+      victory.noStroke();
+      victory.fill(random(0, 255), random(0, 255), random(0, 255), lifespan);
+      victory.circle(location.x, location.y, confettiSize); 
+    }
+    
+    void run(PGraphics victory){
+      update();
+      display(victory);
+    }
 }

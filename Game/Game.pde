@@ -60,8 +60,8 @@
     image(affichage.barChart, 2*topViewSize + frameSize/2 , height-topViewSize + frameSize/2); 
     affichage.scrollBar();
     image(affichage.scrollBar, 2*topViewSize + frameSize/2, height - scrollBarHeight - frameSize / 2);
-    //affichage.victory(); 
-    //image(affichage.victory, 0, 0); 
+    affichage.victory(); 
+    image(affichage.victory, 0, 0); 
   }
   
   
