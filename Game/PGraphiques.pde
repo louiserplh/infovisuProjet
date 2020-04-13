@@ -33,18 +33,30 @@ class PGraphiques {
   
   float timeStart2 ; 
   float timeElapsed2 ; 
-  
-  final PVector color1 = new PVector(254,235,201) ;  //brun pastel 
-  final PVector color2 = new PVector(255,240,210) ;  //brun pastel + clair
-  final PVector color3 = new PVector(252,169,133) ;  //brun petant
-  final PVector accentColor = new PVector(165,137,193) ; //vert
-  
-  /*
-  final PVector color1 = new PVector(245, 237, 208) ;  //brun pastel 
-  final PVector color2 = new PVector(255, 247, 218) ;  //brun pastel + clair
-  final PVector color3 = new PVector(192, 186, 152) ;  //brun petant
-  final PVector accentColor = new PVector(112, 182, 115) ; //vert
-  */
+
+
+//rose et bleu
+  final PVector color1 = new PVector(253,235,240) ;  //rose pastel 
+  final PVector color2 = new PVector(253,240,245) ;  //rose pastel + clair
+  final PVector color3 = new PVector(249,140,182) ;  //rose petant
+  final PVector accentColor = new PVector(117,137,191) ; //bleu
+
+
+/*
+//orange et violet
+  final PVector color1 = new PVector(254,235,201) ;  //orange pastel 
+  final PVector color2 = new PVector(255,240,210) ;  //orange pastel + clair
+  final PVector color3 = new PVector(252,169,133) ;  //orange petant
+  final PVector accentColor = new PVector(165,137,193) ; //violet
+*/
+
+/*
+ // brun et vert
+  final PVector color1 = new PVector(245,237,208) ;  //brun pastel 
+  final PVector color2 = new PVector(255,247,218) ;  //brun pastel + clair
+  final PVector color3 = new PVector(192,186,152) ;  //brun petant
+  final PVector accentColor = new PVector(112,182,115) ; //vert
+*/
   
   PGraphiques(){
     gameSurface = createGraphics(width, height-topViewSize, P3D); 
@@ -202,11 +214,11 @@ class PGraphiques {
               barChart.stroke(color2.x, color2.y, color2.z);
               barChart.strokeWeight(1);
               if(rectanglesBarChart.get(i) < 0 ){
-                barChart.fill(accentColor.x, accentColor.y, accentColor.z - 10 * j) ;
-                barChart.rect(strokeWeight/2 + i * dimX, (topViewSize - scrollBarHeight - 2 * frameSize) / 2 + j * dimY, dimX, dimY) ;
+                barChart.fill(accentColor.x, max(accentColor.y - 20*j, 0), max(accentColor.z - 10 * j, 0)) ;
+                barChart.rect(strokeWeight/2 + i * dimX, lineStroke/2 + (topViewSize - scrollBarHeight - 2 * frameSize) / 2 + j * dimY, dimX, dimY) ;
               }else {
-                barChart.fill(accentColor.x, accentColor.y, accentColor.z + 10 * j) ;
-                barChart.rect(strokeWeight/2 + i * dimX, -dimY/2.0 + (topViewSize - scrollBarHeight - 2 * frameSize) / 2  - j * dimY, dimX, dimY) ;
+                barChart.fill(accentColor.x, min(accentColor.y + 10*j, 255), min(accentColor.z + 10 * j, 255)) ;
+                barChart.rect(strokeWeight/2 + i * dimX, -dimY -lineStroke + (topViewSize - scrollBarHeight - 2 * frameSize) / 2  - j * dimY, dimX, dimY) ;
               }
             }
          }    
