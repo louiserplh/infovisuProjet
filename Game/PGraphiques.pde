@@ -34,11 +34,17 @@ class PGraphiques {
   float timeStart2 ; 
   float timeElapsed2 ; 
   
+  final PVector color1 = new PVector(254,235,201) ;  //brun pastel 
+  final PVector color2 = new PVector(255,240,210) ;  //brun pastel + clair
+  final PVector color3 = new PVector(252,169,133) ;  //brun petant
+  final PVector accentColor = new PVector(165,137,193) ; //vert
+  
+  /*
   final PVector color1 = new PVector(245, 237, 208) ;  //brun pastel 
   final PVector color2 = new PVector(255, 247, 218) ;  //brun pastel + clair
   final PVector color3 = new PVector(192, 186, 152) ;  //brun petant
   final PVector accentColor = new PVector(112, 182, 115) ; //vert
-  
+  */
   
   PGraphiques(){
     gameSurface = createGraphics(width, height-topViewSize, P3D); 
@@ -261,10 +267,19 @@ class PGraphiques {
       victory.background(0);
       victory.textSize(100); 
       //victory.fill(color1.x, color1.y, color1.z); 
+      victory.stroke(random(100, 255), random(100, 255), random(100, 255));
+      victory.strokeWeight(strokeWeight);
+      victory.fill(0);
+      victory.rect(710, height/2 - 190, 520, 105);
+      victory.noStroke();
       victory.fill(random(100, 255), random(100, 255), random(100, 255));
       victory.text("YOU WON", 735, height/2 - 100);
+      victory.textSize(17);
+      victory.fill(color1.x, color1.y, color1.z);
+      victory.text("[press the control key to continue playing]", 800, height/2 - 60 );
       victory.textSize(20);
-      victory.text("[press the control key to continue playing]", 775, height/2 - 50 ); 
+      victory.text("Final Score :", 900, height/2 + 75 ); 
+      victory.text(totalScore, 1050, height/2 + 75  );
       
       for (PatricleSystemConfetti psc: confettiList){
         psc.run(victory) ;
