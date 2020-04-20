@@ -4,28 +4,32 @@ HScrollbar thresholdBar1;
 HScrollbar thresholdBar2;
 
 void settings() {
-  size(1600, 600);
+  size(800, 645);
 }
 void setup() {
    img = loadImage("board1.jpg");
-   img2 = loadImage("board1Blurred.bmp");
+   //img2 = loadImage("board1Blurred.bmp");
    
-   /**
-   thresholdBar1 = new HScrollbar(img.width, img.height, 600, 20);
-   thresholdBar2 = new HScrollbar(img.width, img.height + 20, 600, 20);
-   **/
-   noLoop(); // no interactive behaviour: draw() will be called only once. 
+   
+   thresholdBar1 = new HScrollbar(0, img.height, 600, 20);
+   thresholdBar2 = new HScrollbar(0, img.height + 25, 600, 20);
+   
+   //noLoop(); // no interactive behaviour: draw() will be called only once. 
 }
 
 void draw() {
-  image(img, 0, 0);//show image
   //PImage im2 = thresholdHSB(img, 100, 200, 100, 255, 45, 100);
-  PImage im2 = convolute(img);
-  image(im2, img.width, 0);
+  //PImage im2 = convolute(img);
+  //image(im2, img.width, 0);
   /**
   PImage im2 = hueMap(img, round(thresholdBar1.getPos()*255), round(thresholdBar2.getPos()*255));
   image(im2, img.width, 0);
   
+  **/
+  PImage im2 = hueMap(img, round(thresholdBar1.getPos()*255), round(thresholdBar2.getPos()*255));
+  im2 = scharr(im2);
+  im2 = thresholdHSB(im2, 0, 255, 0, 255, 50, 210);
+ 
   
   thresholdBar1.display();
   thresholdBar1.update();
@@ -33,13 +37,17 @@ void draw() {
   thresholdBar2.display();
   thresholdBar2.update();
   
+  
+  image(im2, 0, 0);//show image
+  
+  /**
   PImage im2 = threshold(img, round(thresholdBar.getPos()*255));
   image(im2, img.width, 0);
   thresholdBar.display();
   thresholdBar.update();
   **/
   
-  println(imagesEqual(im2, img2));
+  //println(imagesEqual(im2, img2));
 
 }
 
@@ -91,13 +99,11 @@ PImage thresholdHSB(PImage img, int minH, int maxH, int minS, int maxS, int minB
     if(hue(pixel) >= minH && hue(pixel) <= maxH) {
       if(saturation(pixel) >= minS && saturation(pixel) <= maxS) {
         if(brightness(pixel) >= minB && brightness(pixel) <= maxB) {
-          result.pixels[i] = color(255, 255, 255);
+          result.pixels[i] = img.pixels[i];
         }
       }
     }
-    else {
-      result.pixels[i] = color(0, 0, 0);
-    }
+
     
     
   }
