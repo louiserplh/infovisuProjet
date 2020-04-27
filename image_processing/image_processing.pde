@@ -8,65 +8,26 @@ void settings() {
 }
 void setup() {
    img = loadImage("board1.jpg");
-   //img2 = loadImage("board1Blurred.bmp");
-   
-   
    thresholdBar1 = new HScrollbar(0, img.height, 600, 20);
-   thresholdBar2 = new HScrollbar(0, img.height + 25, 600, 20);
-   
+   thresholdBar2 = new HScrollbar(0, img.height + 25, 600, 20); 
    //noLoop(); // no interactive behaviour: draw() will be called only once. 
 }
 
 void draw() {
-  //PImage im2 = thresholdHSB(img, 100, 200, 100, 255, 45, 100);
-  //PImage im2 = convolute(img);
-  //image(im2, img.width, 0);
-  /**
-  PImage im2 = hueMap(img, round(thresholdBar1.getPos()*255), round(thresholdBar2.getPos()*255));
-  image(im2, img.width, 0);
-  
-  **/
-  PImage im2 = hueMap(img, round(thresholdBar1.getPos()*255), round(thresholdBar2.getPos()*255));
+  PImage im2 = hueMap(img, 115, 140);
+  im2 = convolute(im2);
   im2 = scharr(im2);
-  im2 = thresholdHSB(im2, 0, 255, 0, 255, 50, 210);
- 
-  
-  thresholdBar1.display();
-  thresholdBar1.update();
-  
-  thresholdBar2.display();
-  thresholdBar2.update();
-  
-  
+  im2 = thresholdHSB(im2, 0, 255, 0, 255, 80, 200);
   image(im2, 0, 0);//show image
-  
-  /**
-  PImage im2 = threshold(img, round(thresholdBar.getPos()*255));
-  image(im2, img.width, 0);
-  thresholdBar.display();
-  thresholdBar.update();
-  **/
-  
-  //println(imagesEqual(im2, img2));
 
-}
-
-boolean imagesEqual(PImage img1, PImage img2){
-  if(img1.width != img2.width || img1.height != img2.height)
-     return false;
-   for(int i = 0; i < img1.width*img1.height ; i++)
-             //assuming that all the three channels have the same value
-      if(red(img1.pixels[i]) != red(img2.pixels[i])) 
-      return false;
-  return true; 
 }
 
 PImage hueMap(PImage img, int threshold1, int threshold2) {
   PImage result = createImage(img.width, img.height, RGB);
-  //print(threshold1 + " " + threshold2 + " ");
+  
   for(int i = 0; i < img.width * img.height; i++) {
     if(hue(img.pixels[i]) >= threshold1 && hue(img.pixels[i]) <= threshold2) {
-      result.pixels[i] = img.pixels[i];
+      result.pixels[i] = color(255, 255, 255);
     }
   }
   result.updatePixels();
@@ -79,7 +40,7 @@ PImage threshold(PImage img, int threshold){
   for(int i = 0; i < img.width * img.height; i++) {
       if(brightness(img.pixels[i]) <= threshold) {
         result.pixels[i] = color(255, 255, 255);
-      }// do something with the pixel img.pixels[i]
+      }
       else {
         result.pixels[i] = color(0, 0, 0); 
       }
@@ -99,7 +60,7 @@ PImage thresholdHSB(PImage img, int minH, int maxH, int minS, int maxS, int minB
     if(hue(pixel) >= minH && hue(pixel) <= maxH) {
       if(saturation(pixel) >= minS && saturation(pixel) <= maxS) {
         if(brightness(pixel) >= minB && brightness(pixel) <= maxB) {
-          result.pixels[i] = img.pixels[i];
+          result.pixels[i] = color(255, 255, 255);
         }
       }
     }
