@@ -14,13 +14,43 @@ class BlobDetection {
     
     for(int i = 0; i < input.width*input.height; ++i) {
       if(brightness(img.pixels[i]) == 255 && saturation(img.pixels[i]) == 255) { // if hsb white encoding
-        
+        int[] neighbors = neighbors(input, i, labels);
+      
+        if(neighbors[0] == neighbors[1] && neighbors[1] == neighbors[2] && neighbors[2] == neighbors[3]) {
+          if(neighbors[0] == 0) {
+             labels [i] = currentLabel;
+             ++currentLabel;
+          }
+          else {
+            labels[i] = neighbors[0];
+          }
+        }
+       
+        else {
+          TreeSet<Integer> tree = new TreeSet<Integer>();
+          int current = 0;
+          for(int j = 0; j < 4; ++j) {
+            if(neighbors[j] != 0 && neighbors[j] <= current) {
+              current = neighbors[j];
+            }
+            else {
+              tree.add(neighbors[j]);
+            }
+          }
+          tree.add(current);
+          labels[i] = current;
+          labelsEquivalences.add(tree);
+        }
       }
+      
       else {
         labels [i] = 0;
       }
       
     }
+    
+    
+    
     // TODO!
             // Second pass: re-label the pixels by their equivalent class
             // if onlyBiggest==true, count the number of pixels for each label
@@ -39,9 +69,16 @@ class BlobDetection {
     int y = currentIndex/img.width;
     
     for(int i = 0; i <= 2; ++i) {
-      res[i] = labels [(y - 1) * img.width + (x - 1 + i)];
+      int newX = x - 1 + i;
+      int newY = y - 1;
+      if(newX >= 0 && newX < img.width && newY >= 0 && newY < img.height) {
+        res[i] = labels [newY * img.width + newX];
+      }
+      else {
+        res[i] = 0;
+      }
     }
-    res[3] = labels [currentIndex - 1];
+    res[3] = (x >= 1) ? labels [currentIndex - 1] : 0;
     
     
     
