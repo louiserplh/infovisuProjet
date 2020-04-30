@@ -18,8 +18,8 @@ void setup() {
 
 void draw() {
   
-  blob.findConnectedComponents(img2, true);
-  image(img2, 0, 0);
+  PImage res = blob.findConnectedComponents(img2, true);
+  image(res, 0, 0);
   
   /**
   PImage im2 = hueMap(img, 115, 140);
