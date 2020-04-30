@@ -2,6 +2,7 @@ PImage img;
 PImage img2;
 HScrollbar thresholdBar1;
 HScrollbar thresholdBar2;
+BlobDetection blob = new BlobDetection();
 
 void settings() {
   size(800, 645);
@@ -10,15 +11,25 @@ void setup() {
    img = loadImage("board1.jpg");
    thresholdBar1 = new HScrollbar(0, img.height, 600, 20);
    thresholdBar2 = new HScrollbar(0, img.height + 25, 600, 20); 
-   //noLoop(); // no interactive behaviour: draw() will be called only once. 
+   noLoop(); // no interactive behaviour: draw() will be called only once. 
+   
+   img2 = loadImage("blob.png");
 }
 
 void draw() {
+  
+  blob.findConnectedComponents(img2, true);
+  image(img2, 0, 0);
+  
+  /**
   PImage im2 = hueMap(img, 115, 140);
   im2 = convolute(im2);
   im2 = scharr(im2);
   im2 = thresholdHSB(im2, 0, 255, 0, 255, 80, 200);
   image(im2, 0, 0);//show image
+  **/
+  
+  
 
 }
 
