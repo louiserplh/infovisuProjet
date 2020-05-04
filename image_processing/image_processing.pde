@@ -18,16 +18,21 @@ void setup() {
 
 void draw() {
   
+  /**
   PImage res = blob.findConnectedComponents(img2, true);
   image(res, 0, 0);
-  
-  /**
-  PImage im2 = hueMap(img, 115, 140);
-  im2 = convolute(im2);
-  im2 = scharr(im2);
-  im2 = thresholdHSB(im2, 0, 255, 0, 255, 80, 200);
-  image(im2, 0, 0);//show image
   **/
+  
+  
+  PImage im2 = hueMap(img, 115, 134);
+  im2 = blob.findConnectedComponents(im2, true);
+  //im2 = convolute(im2);
+  im2 = scharr(im2);
+  //im2 = thresholdHSB(img, im2, 0, 255, 0, 255, 80, 200);
+ im2 = thresholdBrightness(img, im2, 84, 100);
+
+  image(im2, 0, 0);//show image
+  
   
   
 
@@ -60,18 +65,18 @@ PImage threshold(PImage img, int threshold){
   return result;
 }
 
-PImage thresholdHSB(PImage img, int minH, int maxH, int minS, int maxS, int minB, int maxB) {
+PImage thresholdHSB(PImage img, PImage img2, int minH, int maxH, int minS, int maxS, int minB, int maxB) {
   PImage result = createImage(img.width, img.height, RGB);
   
   for(int i = 0; i < img.width * img.height; i++) {
     
-    int pixel = img.pixels[i];
+    int pixel = img2.pixels[i];
     
     // Hue part
-    if(hue(pixel) >= minH && hue(pixel) <= maxH) {
+    if(!(hue(pixel) <= minH && hue(pixel) <= maxH)) {
       if(saturation(pixel) >= minS && saturation(pixel) <= maxS) {
         if(brightness(pixel) >= minB && brightness(pixel) <= maxB) {
-          result.pixels[i] = color(255, 255, 255);
+          result.pixels[i] = img2.pixels[i];
         }
       }
     }
@@ -82,6 +87,23 @@ PImage thresholdHSB(PImage img, int minH, int maxH, int minS, int maxS, int minB
     
   result.updatePixels();
   return result;
+}
+
+PImage thresholdBrightness(PImage img, PImage img2, int minB, int maxB) {
+  
+  //PImage result = createImage(img.width, img.height, RGB);
+  
+  for(int i = 0; i < img.width * img.height; i++) {
+    
+    int pixel = img2.pixels[i];
+    
+    if(!(brightness(pixel) >= minB && brightness(pixel) <= maxB)) {
+          img2.pixels[i] = color(0, 0, 0);
+     }
+  }
+    
+  img2.updatePixels();
+  return img2;
 }
 
 PImage convolute(PImage img) {
