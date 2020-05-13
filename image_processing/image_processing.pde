@@ -17,21 +17,20 @@ void setup() {
 void draw() {
   
   
-  /**
+  
   PImage im2 = hueMap(img, 115, 134);
   im2 = blob.findConnectedComponents(im2, true);
   //im2 = convolute(im2);
-  im2 = scharr(im2);
-  //im2 = thresholdHSB(img, im2, 0, 255, 0, 255, 80, 200);
- im2 = thresholdBrightness(img, im2, 84, 100);
- **/
+   im2 = scharr(im2);
+  im2 = thresholdBrightness(img, im2, 84, 100);
+ 
 
   //image(im2, 0, 0);//show image
   //List<PVector> lignes = 
 
   //plot(im2,lignes);
-  
-  hough(houghImg);
+  image(houghImg, 0, 0);
+  plot(houghImg, hough(houghImg));
 
 }
 

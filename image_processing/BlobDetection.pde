@@ -25,8 +25,6 @@ class BlobDetection {
       if(brightness(input.pixels[i]) == 100) { // if pixel is white
         int[] neighbors = neighbors(input, i, labels);
 
-          //println(i + " : " + neighbors[0] + " " + neighbors[1] + " " + neighbors[2] + " " + neighbors[3] + " ");
-
         if(sameLabels(neighbors)) {
           
           int firstInFrame = firstInFrame(neighbors);

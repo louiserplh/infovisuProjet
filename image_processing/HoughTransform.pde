@@ -3,7 +3,7 @@ List<PVector> hough(PImage edgeImg) {
   
   float discretizationStepsPhi = 0.06f; 
   float discretizationStepsR = 2.5f; 
-  int minVotes=30;
+  int minVotes=50;
   
   //dimensions of the accumulator
   int phiDim = (int) (Math.PI / discretizationStepsPhi +1);
@@ -31,12 +31,16 @@ List<PVector> hough(PImage edgeImg) {
             // Be careful: r may be negative, so you may want to center onto
             // the accumulator: r += rDim / 2
             
-          for(float phi = 0; phi< Math.PI; phi += discretizationStepsPhi){
-            float r = (float)((x*Math.cos(phi))+(y*Math.sin(phi)));
-            if(r < 0) { r+= (float) rDim/2; }
-            int position = (int)(phi * rDim + r);
             
-            accumulator[position] += 1;
+           
+        
+        for(int phiIndex = 0; phiIndex < phiDim; phiIndex++) {
+          float phi = phiIndex * discretizationStepsPhi;
+          float r = (float)((x*Math.cos(phi))+(y*Math.sin(phi)));
+          int rIndex = (int) ((r / discretizationStepsR) + rDim/2);
+          int position = (phiIndex * rDim + rIndex);
+          accumulator[position] += 1;
+          
         }
       } 
     }
@@ -63,10 +67,10 @@ List<PVector> hough(PImage edgeImg) {
       houghImg.pixels[i] = color(min(255, accumulator[i]));
     }  
   // You may want to resize the accumulator to make it easier to see:
-  houghImg.resize(1000, 1000);
+  houghImg.resize(400, 400);
   //test
   houghImg.updatePixels();
-  image(houghImg,0,0);
+  //image(houghImg,0,0);
   
   
   return lines;
