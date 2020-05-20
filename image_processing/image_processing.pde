@@ -1,8 +1,8 @@
 PImage img;
 PImage img2;
 PImage houghImg;
-
 BlobDetection blob = new BlobDetection();
+QuadGraph quad = new QuadGraph();
 
 void settings() {
   size(800, 645);
@@ -27,11 +27,12 @@ void draw() {
  
 
   //image(im2, 0, 0);//show image
-  List<PVector> lignes = hough(houghImg);
+  List<PVector> lignes = hough(im2,10,10);
   
-  image(houghImg, 0, 0);
-  plot(houghImg, lignes);
-
+  image(im2, 0, 0);
+  List<PVector> quads = quad.findBestQuad(lignes,im2.width,im2.height,(im2.width*im2.height),(im2.width*im2.height)/6, false);
+  println(quads);
+  plot(im2, lignes,quads);
 }
 
 PImage hueMap(PImage img, int threshold1, int threshold2) {
@@ -178,7 +179,7 @@ PImage scharr(PImage img) {
   return result;
 }
 
-void plot(PImage edgeImg, List<PVector> lines){
+void plot(PImage edgeImg, List<PVector> lines, List<PVector> quads){
   
   for (int idx = 0; idx < lines.size(); idx++) {
     PVector line=lines.get(idx);
@@ -218,6 +219,11 @@ void plot(PImage edgeImg, List<PVector> lines){
       else
         line(x2, y2, x3, y3);
     }
+  }
+  for(int i = 0; i<quads.size(); i++){
+    stroke(100,0,0);
+    noFill();
+    circle(quads.get(i).x, quads.get(i).y,30);
   }
 
 }

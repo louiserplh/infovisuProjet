@@ -1,5 +1,5 @@
-
-List<PVector> hough(PImage edgeImg) {
+import java.util.Collections;
+List<PVector> hough(PImage edgeImg, Integer nLines, Integer neighbours) {
   
   float discretizationStepsPhi = 0.06f; 
   float discretizationStepsR = 2.5f; 
@@ -47,18 +47,23 @@ List<PVector> hough(PImage edgeImg) {
   }
 
   ArrayList<PVector> lines = new ArrayList<PVector>(); 
+  ArrayList<Integer> bestCandidates = new ArrayList<Integer>();
 
   for (int idx = 0; idx < accumulator.length; idx++) { 
     if (accumulator[idx] > minVotes) {
-      
-      // first, compute back the (r, phi) polar coordinates:
-      int accPhi = (int) (idx / (rDim));
-      int accR = idx - (accPhi) * (rDim);
-      float r = (accR - (rDim) * 0.5f) * discretizationStepsR; 
-      float phi = accPhi * discretizationStepsPhi; 
-      
-      lines.add(new PVector(r,phi));
+      if(neighbours(idx,accumulator,neighbours)){
+      bestCandidates.add(idx);
+      }
     }
+  }
+  Collections.sort(bestCandidates, new HoughComparator(accumulator));
+  for(int i=0; i<min(nLines,bestCandidates.size()); i++){
+    int accPhi = (int) (bestCandidates.get(i) / (rDim));
+    int accR =  bestCandidates.get(i)- (accPhi) * (rDim);
+    float r = (accR - (rDim) * 0.5f) * discretizationStepsR; 
+    float phi = accPhi * discretizationStepsPhi; 
+      
+    lines.add(new PVector(r,phi));
   }
   
     //display the accumulator
@@ -74,4 +79,12 @@ List<PVector> hough(PImage edgeImg) {
   
   
   return lines;
+}
+boolean neighbours(int index, int[] accumulator, int neighbours){
+  for(int i = index-neighbours; i<= index+neighbours; ++i){
+    if(accumulator[i]>accumulator[index]){
+      return false;
+    }
+  }
+  return true;
 }
