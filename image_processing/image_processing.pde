@@ -18,19 +18,19 @@ void draw() {
   
   
   
-  PImage im2 = hueMap(img, 115, 134);
-  im2 = blob.findConnectedComponents(im2, true);
+  //PImage im2 = hueMap(img, 115, 134);
+  PImage im2 = thresholdHSB(img,115, 134, 0,255,0,255);
   //im2 = convolute(im2);
-   im2 = scharr(im2);
+  im2 = blob.findConnectedComponents(im2, true);
+  im2 = scharr(im2);
   im2 = thresholdBrightness(img, im2, 84, 100);
  
 
   //image(im2, 0, 0);//show image
-  //List<PVector> lignes = 
-
-  //plot(im2,lignes);
+  List<PVector> lignes = hough(houghImg);
+  
   image(houghImg, 0, 0);
-  plot(houghImg, hough(houghImg));
+  plot(houghImg, lignes);
 
 }
 
@@ -61,18 +61,18 @@ PImage threshold(PImage img, int threshold){
   return result;
 }
 
-PImage thresholdHSB(PImage img, PImage img2, int minH, int maxH, int minS, int maxS, int minB, int maxB) {
-  PImage result = createImage(img.width, img.height, RGB);
+PImage thresholdHSB(PImage img2, int minH, int maxH, int minS, int maxS, int minB, int maxB) {
+  PImage result = createImage(img2.width, img2.height, RGB);
   
-  for(int i = 0; i < img.width * img.height; i++) {
+  for(int i = 0; i < img2.width * img2.height; i++) {
     
     int pixel = img2.pixels[i];
     
     // Hue part
-    if(!(hue(pixel) <= minH && hue(pixel) <= maxH)) {
+    if(hue(pixel) >= minH && hue(pixel) <= maxH) {
       if(saturation(pixel) >= minS && saturation(pixel) <= maxS) {
         if(brightness(pixel) >= minB && brightness(pixel) <= maxB) {
-          result.pixels[i] = img2.pixels[i];
+          result.pixels[i] = color(255,255,255);
         }
       }
     }
