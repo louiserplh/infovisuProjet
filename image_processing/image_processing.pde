@@ -25,25 +25,38 @@ void setup() {
 // dessin des différentes images avec différentes méthodes de processing
 void draw() {
 
-
+  //edges
   PImage im2 = thresholdHSB(img, 115, 134, 0, 255, 0, 255);
   im2 = convolute(im2);
+  im2 = blob.findConnectedComponents(im2, true);
+  image(im2, img.width*2 + 2, 0); //only blob
   im2 = scharr(im2);
-  im2 = thresholdBrightness(img, im2, 120, 180);
-
+  im2 = thresholdBrightness(img, im2, 10, 180);
+  image(im2, img.width + 1, 0); //edges
+  
+  List<PVector> lignes = hough(im2,10,10);
+  
+  image(img, 0, 0);
+  List<PVector> quads = quad.findBestQuad(lignes,im2.width,im2.height,(im2.width*im2.height),(im2.width*im2.height)/6, false);
+  plot(im2, lignes, quads);//lines + coins
+  
+  /**blob
   PImage im3 = thresholdHSB(img, 115, 134, 0,255,0,255);
-  im3 = blob.findConnectedComponents(im3, true);
- 
-  PImage im1 = scharr(im3);
-  //im1 = thresholdBrightness(img, im1,120, 180);
+  //im3 = blob.findConnectedComponents(im3, true);
+  //all
+  
+  PImage im1 = thresholdHSB(img, 115, 134, 0, 255, 0, 255);
+  im1 = convolute(im1);
+  im1 = blob.findConnectedComponents(im1, true);
+  im1 = scharr(im1);
+  //im1 = thresholdBrightness(img, im1, 120, 180);
   List<PVector> lignes = hough(im1,10,10);
   
   image(img, 0, 0);
   List<PVector> quads = quad.findBestQuad(lignes,im1.width,im1.height,(im1.width*im1.height),(im1.width*im1.height)/6, false);
-  plot(im1, lignes, quads);
+  plot(im1, lignes, quads);**/
   
-  image(im3, im2.width*2 + 2, 0);
-  image(im2, im2.width + 1, 0);
+  
   
 }
 
@@ -120,7 +133,7 @@ PImage thresholdBrightness(PImage img, PImage img2, int minB, int maxB) {
 }
 
 PImage convolute(PImage img) {
-  float[][] kernel = { { 9, 12, 9 },
+  float[][] kernel = { { 9, 12, 9 }, //gaussianKernel
                      { 12, 15, 12 },
                      { 9, 12, 9 }};
   float normFactor = 99.f;
@@ -148,6 +161,7 @@ PImage convolute(PImage img) {
   return result;
 }
 
+//Edge Detection
 PImage scharr(PImage img) {
   float[][] vKernel = {
     { 3, 0, -3 },
@@ -178,7 +192,9 @@ PImage scharr(PImage img) {
           sum_v += brightness(img.pixels[j * img.width + i])* vKernel[n][m];
         }
       }
+      //compute the compound sum as an Euclidian distance
       float sum=sqrt(pow(sum_h, 2) + pow(sum_v, 2));
+      //store in the buffer
       buffer[y*img.width + x]=sum;
       if(sum>max){
         max = sum;
