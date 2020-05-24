@@ -18,7 +18,7 @@ void settings() {
 
 // initialisation de l'image
 void setup() {
-   img = loadImage("board1.jpg");
+   img = loadImage("board3.jpg");
    noLoop(); // no interactive behaviour: draw() will be called only once. 
 }
 
@@ -26,7 +26,7 @@ void setup() {
 void draw() {
 
   //edges
-  PImage im2 = thresholdHSB(img, 115, 134, 0, 255, 0, 255);
+  PImage im2 = thresholdHSB(img, 75, 140, 90, 255, 30, 255);
   im2 = convolute(im2);
   im2 = blob.findConnectedComponents(im2, true);
   image(im2, img.width*2 + 2, 0); //only blob
