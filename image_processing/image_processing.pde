@@ -1,101 +1,117 @@
+  /*
+  *  image_processing.pde  
+  *  Classe avec différentes méthodes d'image processing
+  *  Groupe Q : 
+  *     BIANCHI Elisa 300928     ;
+  *     DENOVE Emmanuelle 301576 ;
+  *     RIEUPOUILH Louise 299418 ;
+  */
+
 PImage img;
-PImage img2;
-PImage houghImg;
 BlobDetection blob = new BlobDetection();
 QuadGraph quad = new QuadGraph();
 
+// taille de la fenêtre
 void settings() {
-  size(800, 645);
+  size(800*3, 650);
 }
+
+// initialisation de l'image
 void setup() {
    img = loadImage("board1.jpg");
    noLoop(); // no interactive behaviour: draw() will be called only once. 
-
-   houghImg = loadImage("hough_test.bmp");
 }
 
+// dessin des différentes images avec différentes méthodes de processing
 void draw() {
-  
-  
-  
-  //PImage im2 = hueMap(img, 115, 134);
-  PImage im2 = thresholdHSB(img,115, 134, 0,255,0,255);
-  //im2 = convolute(im2);
-  im2 = blob.findConnectedComponents(im2, true);
-  im2 = scharr(im2);
-  im2 = thresholdBrightness(img, im2, 84, 100);
- 
 
-  //image(im2, 0, 0);//show image
-  List<PVector> lignes = hough(im2,10,10);
+
+  PImage im2 = thresholdHSB(img, 115, 134, 0, 255, 0, 255);
+  im2 = convolute(im2);
+  im2 = scharr(im2);
+  im2 = thresholdBrightness(img, im2, 120, 180);
+
+  PImage im3 = thresholdHSB(img, 115, 134, 0,255,0,255);
+  im3 = blob.findConnectedComponents(im3, true);
+ 
+  PImage im1 = scharr(im3);
+  //im1 = thresholdBrightness(img, im1,120, 180);
+  List<PVector> lignes = hough(im1,10,10);
   
-  image(im2, 0, 0);
-  List<PVector> quads = quad.findBestQuad(lignes,im2.width,im2.height,(im2.width*im2.height),(im2.width*im2.height)/6, false);
-  println(quads);
-  plot(im2, lignes,quads);
+  image(img, 0, 0);
+  List<PVector> quads = quad.findBestQuad(lignes,im1.width,im1.height,(im1.width*im1.height),(im1.width*im1.height)/6, false);
+  plot(im1, lignes, quads);
+  
+  image(im3, im2.width*2 + 2, 0);
+  image(im2, im2.width + 1, 0);
+  
 }
 
-PImage hueMap(PImage img, int threshold1, int threshold2) {
+// méthode pour afficher la hueMap de l'image
+PImage hueMap(PImage img) {
+  
+  // création d'une image initialement transparente
   PImage result = createImage(img.width, img.height, RGB);
   
+  // pour chaque pixel dans img, colorer le pixel correspondant dans result en fonction de la hue
   for(int i = 0; i < img.width * img.height; i++) {
-    if(hue(img.pixels[i]) >= threshold1 && hue(img.pixels[i]) <= threshold2) {
-      result.pixels[i] = color(255, 255, 255);
-    }
+      result.pixels[i] = color(hue(img.pixels[i]));
   }
   result.updatePixels();
   return result;
 }
 
+// méthode pour garder seulement les pixels dont l'intensité est inférieure à threshold
 PImage threshold(PImage img, int threshold){
-  // create a new, initially transparent, 'result' image 
+ 
+  // création d'une image initialement transparente
   PImage result = createImage(img.width, img.height, RGB); 
+  
   for(int i = 0; i < img.width * img.height; i++) {
       if(brightness(img.pixels[i]) <= threshold) {
-        result.pixels[i] = color(255, 255, 255);
+        result.pixels[i] = color(255, 255, 255); // couleur blanche pour pixels dont l'intensité <= threshold
       }
       else {
-        result.pixels[i] = color(0, 0, 0); 
+        result.pixels[i] = color(0, 0, 0);  // sinon couleur noire
       }
   }
   result.updatePixels();
   return result;
 }
 
+// méthode pour garder les pixels par rapport aux thresholds HSB donnés
 PImage thresholdHSB(PImage img2, int minH, int maxH, int minS, int maxS, int minB, int maxB) {
+  
+  // création d'une image initialement transparente
   PImage result = createImage(img2.width, img2.height, RGB);
   
   for(int i = 0; i < img2.width * img2.height; i++) {
     
     int pixel = img2.pixels[i];
     
-    // Hue part
-    if(hue(pixel) >= minH && hue(pixel) <= maxH) {
-      if(saturation(pixel) >= minS && saturation(pixel) <= maxS) {
-        if(brightness(pixel) >= minB && brightness(pixel) <= maxB) {
-          result.pixels[i] = color(255,255,255);
+    if(hue(pixel) >= minH && hue(pixel) <= maxH) { // partie hue
+      if(saturation(pixel) >= minS && saturation(pixel) <= maxS) { // partie saturation
+        if(brightness(pixel) >= minB && brightness(pixel) <= maxB) { // partie intensité
+          result.pixels[i] = color(255,255,255); // couleur blanche pour les pixels en question
         }
       }
     }
-
-    
-    
   }
     
   result.updatePixels();
   return result;
 }
 
+// méthode pour garder dans img2 seulement les pixels dont l'intensité dans img est dans le threshold donné
 PImage thresholdBrightness(PImage img, PImage img2, int minB, int maxB) {
   
-  //PImage result = createImage(img.width, img.height, RGB);
   
   for(int i = 0; i < img.width * img.height; i++) {
     
-    int pixel = img2.pixels[i];
+    int pixel = img.pixels[i]; // pixel choisi par rapport à img
     
     if(!(brightness(pixel) >= minB && brightness(pixel) <= maxB)) {
-          img2.pixels[i] = color(0, 0, 0);
+          img2.pixels[i] = color(0, 0, 0); // pixel mis à noir dans img2 s'il n'est pas dans le threshold
      }
   }
     
