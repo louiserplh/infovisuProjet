@@ -13,33 +13,34 @@ QuadGraph quad = new QuadGraph();
 
 // taille de la fenêtre
 void settings() {
-  size(800*3, 650);
+  size(600*3 + 2, 450);
 }
 
 // initialisation de l'image
 void setup() {
-   img = loadImage("board4.jpg");
+   img = loadImage("board1.jpg");
    noLoop(); // no interactive behaviour: draw() will be called only once. 
 }
 
 // dessin des différentes images avec différentes méthodes de processing
 void draw() {
 
+  img.resize(600,450);
   //edges
-  PImage im2 = thresholdHSB(img, 75, 140, 90, 255, 30, 255);
+  PImage im2 = thresholdHSB(img, 75, 140, 50, 255, 30, 255);
   im2 = convolute(im2);
   im2 = blob.findConnectedComponents(im2, true);
-  image(im2, img.width*2 + 2, 0); //only blob
+  PImage right = im2.copy();
   im2 = scharr(im2);
   im2 = thresholdBrightness(img, im2, 10, 180);
-  image(im2, img.width + 1, 0); //edges
+  PImage middle = im2.copy();
   
   List<PVector> lignes = hough(im2,10,10);
-  
   image(img, 0, 0);
   List<PVector> quads = quad.findBestQuad(lignes,im2.width,im2.height,(im2.width*im2.height),(im2.width*im2.height)/6, false);
   plot(im2, lignes, quads);//lines + coins
-  
+  image(right, img.width*2 + 2, 0); //only blob
+  image(middle, img.width + 1, 0); //edges
   /**blob
   PImage im3 = thresholdHSB(img, 115, 134, 0,255,0,255);
   //im3 = blob.findConnectedComponents(im3, true);
@@ -253,8 +254,8 @@ void plot(PImage edgeImg, List<PVector> lines, List<PVector> quads){
     }
   }
   for(int i = 0; i<quads.size(); i++){
-    stroke(100,0,0);
-    noFill();
+    stroke(0,0,0);
+    fill(#f7347a, 60);
     circle(quads.get(i).x, quads.get(i).y,30);
   }
 

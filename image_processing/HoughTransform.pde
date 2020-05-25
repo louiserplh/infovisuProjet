@@ -3,7 +3,7 @@ List<PVector> hough(PImage edgeImg, Integer nLines, Integer neighbours) {
   
   float discretizationStepsPhi = 0.06f; 
   float discretizationStepsR = 2.5f; 
-  int minVotes=250; // can be change if you want more/less lines
+  int minVotes=200; // can be change if you want more/less lines
   
   //dimensions of the accumulator
   int phiDim = (int) (Math.PI / discretizationStepsPhi +1);
