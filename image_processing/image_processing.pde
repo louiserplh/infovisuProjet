@@ -18,7 +18,7 @@ void settings() {
 
 // initialisation de l'image
 void setup() {
-   img = loadImage("board3.jpg");
+   img = loadImage("board4.jpg");
    noLoop(); // no interactive behaviour: draw() will be called only once. 
 }
 
