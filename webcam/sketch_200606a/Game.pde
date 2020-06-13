@@ -1,4 +1,37 @@
- PImage img;
+  /*
+  *  Game.pde  
+  *  Classe principale du jeu
+  *  Groupe Q : 
+  *     BIANCHI Elisa 300928     ;
+  *     DENOVE Emmanuelle 301576 ;
+  *     RIEUPOUILH Louise 299418 ;
+  */
+ 
+  
+  PShape evil;
+  
+  Ball maBoule;
+  Plateau monPlato; 
+  ParticleSystem cylindres;
+  PGraphiques affichage ; 
+  
+  float timeStart ; 
+  float timeElapsed ; 
+  float rapidity = 0.02;
+  
+  int topViewSize = 300 ;
+  int frameSize = 20 ; 
+  int lastScore = 0 ; 
+  int totalScore = 0 ; 
+  int scrollBarHeight = 30 ;
+  
+  boolean timeReset = true ;
+  boolean wasInitialised = false;
+  boolean ajoutCylindre ; 
+  boolean removeCylindre ;
+  boolean partieFinie ; 
+  
+  PImage img;
 BlobDetection blob = new BlobDetection();
 QuadGraph quad = new QuadGraph();
 import processing.video.*; 
@@ -7,16 +40,26 @@ OpenCV opencv;
 Capture cam;
 TwoDThreeD conv;
 //PImage img;
-
-void settings() {
-
+  
+  // taille de la fenetre
+  void settings() {
+      fullScreen();
+      size(displayWidth, displayHeight, P3D); 
       //size(600*3 + 2, 450);
       opencv = new OpenCV(this,100,100);
       size(640, 480);
-}
-
-void setup(){
-  img = loadImage("board2.jpg");
+  }
+  
+  // initialisation des elements de jeu
+  void setup() {     
+    affichage = new PGraphiques();
+    monPlato = new Plateau();
+    maBoule = new Ball(monPlato);
+    PImage img = loadImage("robotnik.png");
+    evil = loadShape("robotnik.obj");
+    evil.setTexture(img);
+    
+     img = loadImage("board2.jpg");
    noLoop(); // no interactive behaviour: draw() will be called only once. 
    /*String[] cameras = Capture.list(); 
          //If you're using gstreamer0.1 (Ubuntu 16.04 and earlier),
@@ -27,10 +70,25 @@ void setup(){
         cam = new Capture(this, 640, 480, cameras[0]);
         cam.start();*/
         conv = new TwoDThreeD(img.width, img.height, 0);
-}
-
-void draw(){
-  img.resize(600,450);
+  }
+   
+  void draw() {
+    affichage.drawGame();
+    image(affichage.gameSurface, 0, 0);
+    affichage.myBackground();
+    image(affichage.myBackground,0,height-topViewSize);
+    affichage.topView();
+    image(affichage.topView, frameSize/2 ,height-topViewSize + frameSize/2);
+    affichage.scoreBoard();
+    image(affichage.scoreBoard, topViewSize + frameSize/2, height-topViewSize + frameSize/2); 
+    affichage.barChart();
+    image(affichage.barChart, 2*topViewSize + frameSize/2 , height-topViewSize + frameSize/2); 
+    affichage.scrollBar();
+    image(affichage.scrollBar, 2*topViewSize + frameSize/2, height - scrollBarHeight - frameSize / 2);
+    affichage.victory(); 
+    image(affichage.victory, 0, 0); 
+    
+    img.resize(600,450);
   //edges
   PImage im2 = thresholdHSB(img, 75, 140, 50, 255, 30, 255);
   im2 = convolute(im2);
@@ -73,7 +131,60 @@ void draw(){
   image(img, 0, 0);
   List<PVector> quads = quad.findBestQuad(lignes,im1.width,im1.height,(im1.width*im1.height),(im1.width*im1.height)/6, false);
   plot(im1, lignes, quads);**/
-}
+  }
+  
+  
+    // detecte si on appuye sur la touche Shift
+    boolean appuierSurShift(){
+      return (keyPressed == true && keyCode == SHIFT); 
+    }
+    
+    //detecte si on appuye sur la touche Enter
+    boolean appuierSurCtrl(){
+      return (keyPressed == true && keyCode == CONTROL);
+    }
+  
+    // rotation du plateau en fonction des axes
+    void mouseDragged() { 
+      if(pmouseX < mouseX && monPlato.rotationZ < (PI/3) && mouseY < height-topViewSize) {
+        monPlato.rotationZ = monPlato.rotationZ + rapidity; 
+      }
+      else if(pmouseX > mouseX && monPlato.rotationZ > (-PI/3) && mouseY < height-topViewSize) {
+        monPlato.rotationZ = monPlato.rotationZ - rapidity; 
+      }
+      if(pmouseY < mouseY && monPlato.rotationX > (-PI/3) && mouseY < height-topViewSize) {
+        monPlato.rotationX = monPlato.rotationX - rapidity; 
+      }
+      else if(pmouseY > mouseY && monPlato.rotationX < (PI/3) && mouseY < height-topViewSize ) {
+        monPlato.rotationX = monPlato.rotationX + rapidity; }
+    }
+    
+    // gérer la rapidité de la rotation
+    void mouseWheel(MouseEvent event) { 
+      
+      if (event.getCount() > 0 && rapidity < 0.2) {
+        rapidity += 0.01;
+      }
+      if (event.getCount() < 0 && rapidity > 0.01) {
+        rapidity -= 0.01;
+      }
+    }
+                           
+    // rajouter le cylindre initial
+    void mouseClicked() {
+      if(appuierSurShift()) {
+        
+        PVector origin = new PVector(mouseX - displayWidth / 2,
+                                     -50 - monPlato.thicc/2,
+                                     mouseY - displayHeight / 2);
+        if(monPlato.surLePlateau(origin)) {        
+          cylindres = new ParticleSystem(origin, monPlato, maBoule, evil, affichage.accentColor);
+          wasInitialised = true;
+        }
+      }
+    }  
+    
+
 
 // méthode pour afficher la hueMap de l'image
 PImage hueMap(PImage img) {
