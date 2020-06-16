@@ -32,20 +32,23 @@
   boolean partieFinie ; 
   
   PImage img;
-BlobDetection blob = new BlobDetection();
-QuadGraph quad = new QuadGraph();
-import processing.video.*; 
-import gab.opencv.*;
-OpenCV opencv;
-Capture cam;
-TwoDThreeD conv;
-//PImage img;
+  BlobDetection blob = new BlobDetection();
+  QuadGraph quad = new QuadGraph();
+  import processing.video.*; 
+  import gab.opencv.*;
+  OpenCV opencv;
+  Capture cam;
+  TwoDThreeD conv;
+  //PImage img;
   
+  float rotationX;
+  float rotationY;
   // taille de la fenetre
   void settings() {
       fullScreen();
       size(displayWidth, displayHeight, P3D); 
-      //size(600*3 + 2, 450);
+      
+       //size(600*3 + 2, 450);
       opencv = new OpenCV(this,100,100);
       size(640, 480);
   }
@@ -59,20 +62,47 @@ TwoDThreeD conv;
     evil = loadShape("robotnik.obj");
     evil.setTexture(img);
     
-     img = loadImage("board2.jpg");
-   noLoop(); // no interactive behaviour: draw() will be called only once. 
-   /*String[] cameras = Capture.list(); 
-         //If you're using gstreamer0.1 (Ubuntu 16.04 and earlier),
-         //select your predefined resolution from the list:
-         // cam = new Capture(this, cameras[21]);
-        //If you're using gstreamer1.0 (Ubuntu 16.10 and later),
-        //select your resolution manually instead:
-        cam = new Capture(this, 640, 480, cameras[0]);
-        cam.start();*/
-        conv = new TwoDThreeD(img.width, img.height, 0);
+    img = loadImage("board1.jpg");
+     //noLoop(); // no interactive behaviour: draw() will be called only once. 
+     /*String[] cameras = Capture.list(); 
+     //If you're using gstreamer0.1 (Ubuntu 16.04 and earlier),
+     //select your predefined resolution from the list:
+     // cam = new Capture(this, cameras[21]);
+    //If you're using gstreamer1.0 (Ubuntu 16.10 and later),
+    //select your resolution manually instead:
+    cam = new Capture(this, 640, 480, cameras[0]);
+    cam.start();*/
+    conv = new TwoDThreeD(img.width, img.height, 0);
   }
    
   void draw() {
+    PImage im2 = thresholdHSB(img, 75, 140, 50, 255, 30, 255);
+    im2 = convolute(im2);
+    im2 = blob.findConnectedComponents(im2, true);
+    PImage right = im2.copy();
+    im2 = scharr(im2);
+    im2 = thresholdBrightness(img, im2, 10, 180);
+    PImage middle = im2.copy();
+    
+    List<PVector> lignes = hough(im2,10,10);
+    image(img, 0, 0);
+    List<PVector> quads = quad.findBestQuad(lignes,im2.width,im2.height,(im2.width*im2.height),(im2.width*im2.height)/15, false);
+    plot(im2, lignes, quads);//lines + coins
+    //image(right, img.width*2 + 2, 0); //only blob
+    //image(middle, img.width + 1, 0); //edges
+    
+    /*if (cam.available() == true) {
+    cam.read();
+    }
+    img = cam.get();
+    image(img, 0, 0);*/
+    homogeneous(quads);
+    PVector vect = conv.get3DRotations(quads);
+    println(quads.size());
+    println("rX = " + getAngle(vect.x) + 
+          " rY = " + getAngle(vect.y) + 
+          " rZ = " + getAngle(vect.z));
+    
     affichage.drawGame();
     image(affichage.gameSurface, 0, 0);
     affichage.myBackground();
@@ -88,49 +118,9 @@ TwoDThreeD conv;
     affichage.victory(); 
     image(affichage.victory, 0, 0); 
     
-    img.resize(600,450);
-  //edges
-  PImage im2 = thresholdHSB(img, 75, 140, 50, 255, 30, 255);
-  im2 = convolute(im2);
-  im2 = blob.findConnectedComponents(im2, true);
-  PImage right = im2.copy();
-  im2 = scharr(im2);
-  im2 = thresholdBrightness(img, im2, 10, 180);
-  PImage middle = im2.copy();
-  
-  List<PVector> lignes = hough(im2,10,10);
-  image(img, 0, 0);
-  List<PVector> quads = quad.findBestQuad(lignes,im2.width,im2.height,(im2.width*im2.height),(im2.width*im2.height)/15, false);
-  plot(im2, lignes, quads);//lines + coins
-  //image(right, img.width*2 + 2, 0); //only blob
-  //image(middle, img.width + 1, 0); //edges
-  
-  /*if (cam.available() == true) {
-    cam.read();
-  }
-  img = cam.get();
-  image(img, 0, 0);*/
-  homogeneous(quads);
-  PVector vect = conv.get3DRotations(quads);
-  println(quads.size());
-  println("rX = " + getAngle(vect.x) + 
-          " rY = " + getAngle(vect.y) + 
-          " rZ = " + getAngle(vect.z));
-  /**blob
-  PImage im3 = thresholdHSB(img, 115, 134, 0,255,0,255);
-  //im3 = blob.findConnectedComponents(im3, true);
-  //all
-  
-  PImage im1 = thresholdHSB(img, 115, 134, 0, 255, 0, 255);
-  im1 = convolute(im1);
-  im1 = blob.findConnectedComponents(im1, true);
-  im1 = scharr(im1);
-  //im1 = thresholdBrightness(img, im1, 120, 180);
-  List<PVector> lignes = hough(im1,10,10);
-  
-  image(img, 0, 0);
-  List<PVector> quads = quad.findBestQuad(lignes,im1.width,im1.height,(im1.width*im1.height),(im1.width*im1.height)/6, false);
-  plot(im1, lignes, quads);**/
+    //edges
+    monPlato.rotationX = getAngle(vect.x);
+    monPlato.rotationZ = getAngle(vect.y);
   }
   
   
@@ -183,9 +173,8 @@ TwoDThreeD conv;
         }
       }
     }  
+
     
-
-
 // méthode pour afficher la hueMap de l'image
 PImage hueMap(PImage img) {
   
@@ -394,5 +383,12 @@ void homogeneous(List<PVector> quads){
 
 float getAngle(float angle){
   angle = (angle*180)/PI;
+  if(angle>60){
+    angle -= 180;
+  }
+  else if(angle<-60){
+    angle += 180;
+  }
   return angle;
 }
+    

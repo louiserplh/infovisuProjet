@@ -1,4 +1,4 @@
- PImage img;
+PImage img;
 BlobDetection blob = new BlobDetection();
 QuadGraph quad = new QuadGraph();
 import processing.video.*; 
@@ -16,7 +16,7 @@ void settings() {
 }
 
 void setup(){
-  img = loadImage("board2.jpg");
+  img = loadImage("board1.jpg");
    noLoop(); // no interactive behaviour: draw() will be called only once. 
    /*String[] cameras = Capture.list(); 
          //If you're using gstreamer0.1 (Ubuntu 16.04 and earlier),
@@ -283,5 +283,11 @@ void homogeneous(List<PVector> quads){
 
 float getAngle(float angle){
   angle = (angle*180)/PI;
+  if(angle>60){
+    angle -= 180;
+  }
+  else if(angle<-60){
+    angle += 180;
+  }
   return angle;
 }
