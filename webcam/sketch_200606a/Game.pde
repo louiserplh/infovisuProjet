@@ -45,9 +45,7 @@
   float rotationY;
   // taille de la fenetre
   void settings() {
-      fullScreen();
-      size(displayWidth, displayHeight, P3D); 
-      
+    fullScreen();      
        //size(600*3 + 2, 450);
       opencv = new OpenCV(this,100,100);
       size(640, 480);
