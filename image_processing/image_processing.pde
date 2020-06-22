@@ -18,7 +18,7 @@ void settings() {
 
 // initialisation de l'image
 void setup() {
-   img = loadImage("board1.jpg");
+   img = loadImage("notebook.JPG");
    noLoop(); // no interactive behaviour: draw() will be called only once. 
 }
 
@@ -27,20 +27,18 @@ void draw() {
 
   img.resize(600,450);
   //edges
-  PImage im2 = thresholdHSB(img, 75, 140, 50, 255, 30, 255);
+  PImage im2 = thresholdHSB(img, 230, 255, 0, 255, 200, 255);  
   im2 = convolute(im2);
   im2 = blob.findConnectedComponents(im2, true);
-  PImage right = im2.copy();
+  //PImage right = im2.copy();
   im2 = scharr(im2);
-  im2 = thresholdBrightness(img, im2, 10, 180);
-  PImage middle = im2.copy();
-  
+  im2 = thresholdBrightness(img, im2, 0, 100);
   List<PVector> lignes = hough(im2,10,10);
   image(img, 0, 0);
   List<PVector> quads = quad.findBestQuad(lignes,im2.width,im2.height,(im2.width*im2.height),(im2.width*im2.height)/6, false);
   plot(im2, lignes, quads);//lines + coins
-  image(right, img.width*2 + 2, 0); //only blob
-  image(middle, img.width + 1, 0); //edges
+  //image(right, img.width*2 + 2, 0); //only blob
+  //mage(middle, img.width + 1, 0); //edges
   /**blob
   PImage im3 = thresholdHSB(img, 115, 134, 0,255,0,255);
   //im3 = blob.findConnectedComponents(im3, true);
